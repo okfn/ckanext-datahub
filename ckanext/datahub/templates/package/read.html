@@ -21,13 +21,12 @@
 
   <py:match path="primarysidebar">
 
-        <py:if test="c.pkg_dict.tracking_summary.total">
-        <li>
-      <span title="viewed ${c.pkg_dict.tracking_summary.total} times">
-        <i class="icon-eye-open"></i> ${c.pkg_dict.tracking_summary.total}
-      </span>
+    <py:if test="c.pkg_dict.tracking_summary.total">
+      <li>
+        <strong>Views:</strong>
+        ${c.pkg_dict.tracking_summary.total}
       </li>
-      </py:if>
+    </py:if>
     <li py:if="c.pkg.license_id" id="dataset-license" class="sidebar-section">
       <strong>License:</strong>
         <py:choose test="">
