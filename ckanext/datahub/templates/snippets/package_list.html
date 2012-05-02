@@ -25,13 +25,11 @@
           </ul>
         </py:if>
         <ul class="openness">
-      <li>
-        <py:if test="package.tracking_summary.total">
-      <span title="viewed ${package.tracking_summary.total} times">
-        <i class="icon-eye-open"></i> ${package.tracking_summary.total}
-      </span>
-      </py:if>
-      </li>
+          <py:if test="package.tracking_summary.total">
+            <li class="analytics">
+              ${package.tracking_summary.total} views
+            </li>
+          </py:if>
           <py:if test="package.isopen">
             <li>
               <a href="http://opendefinition.org/okd/" title="This dataset satisfies the Open Definition.">
