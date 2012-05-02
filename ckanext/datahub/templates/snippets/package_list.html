@@ -25,13 +25,13 @@
           </ul>
         </py:if>
         <ul class="openness">
-		  <li>
-				<py:if test="package.tracking_summary.total">
-			<span title="viewed ${package.tracking_summary.total} times">
-				<i class="icon-eye-open"></i> ${package.tracking_summary.total}
-			</span>
-			</py:if>
-			</li>
+      <li>
+        <py:if test="package.tracking_summary.total">
+      <span title="viewed ${package.tracking_summary.total} times">
+        <i class="icon-eye-open"></i> ${package.tracking_summary.total}
+      </span>
+      </py:if>
+      </li>
           <py:if test="package.isopen">
             <li>
               <a href="http://opendefinition.org/okd/" title="This dataset satisfies the Open Definition.">
@@ -48,13 +48,13 @@
           </py:if>
         </ul>
       </div>
-		</div>
-		<div class="extract">
-			${h.markdown_extract(package.notes)}
-		</div>
+    </div>
+    <div class="extract">
+      ${h.markdown_extract(package.notes)}
+    </div>
         <!--ul py:if="package.tags" class="tags">
           <li py:for="tag in package.tags">${tag.name}</li>
-		  </ul-->
+      </ul-->
     </li>
   </ul>
 
