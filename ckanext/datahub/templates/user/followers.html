@@ -1,0 +1,33 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+  xmlns:i18n="http://genshi.edgewall.org/i18n"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  py:strip="">
+
+  <py:def function="page_title">${c.user} - Followers - User</py:def>
+  <py:def function="page_heading">
+        ${h.linked_gravatar(c.user_dict['email_hash'],48)}
+        <span class="username">${c.user_dict['name']}</span>
+        <py:if test="c.user_dict['fullname']">
+            <span class="fullname">(${c.user_dict['fullname']})'s followers</span>
+        </py:if>
+  </py:def>
+
+  <div py:match="content">
+
+    <div py:if="not c.followers">
+        <div class="span8 no-related-items">
+        Nobody is following ${c.user_dict.display_name}
+        </div>
+    </div>
+
+    <ul class="userlist">
+     <li py:for="follower in c.followers" class="user">
+        <ul>
+          ${h.linked_user(follower['name'], maxlength=20)}
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <xi:include href="layout.html" />
+</html>
