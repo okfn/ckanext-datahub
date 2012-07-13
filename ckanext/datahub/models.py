@@ -21,7 +21,6 @@ _DATAHUB_TABLES_VERSION = 1
 
 def setup():
     '''Call this to ensure datahub-specific db tables exist and up to date'''
-    
     # Setup table definitions in memory if not done so already.
     if _datahub_migration_table is None:
         _define_datahub_tables()
@@ -29,14 +28,14 @@ def setup():
     if model.repo.are_tables_created():
 
         if not _datahub_migration_table.exists():
-            _log.debug('No datahub-specific tables exist.')
+            _log.info('No datahub-specific tables exist.')
             _run_migration_step(0)
 
         for version in range(_current_migration_version(),
                              _DATAHUB_TABLES_VERSION):
             _run_migration_step(version+1)
     else:
-        _log.debug('Datahub-specific table creation deferred.')
+        _log.info('Datahub-specific table creation deferred.')
 
 ### Domain Model Definitions ###
 
@@ -136,7 +135,7 @@ def _current_migration_version():
                      .scalar() or 0
 
 def _run_migration_step(version):
-    _log.debug('Running datahub migration step %d', version)
+    _log.info('Running datahub migration step %d', version)
     if version == 0:
         _migration_step_0()
     elif version == 1:
@@ -149,17 +148,18 @@ def _set_migration_version(version):
     assert version <= _DATAHUB_TABLES_VERSION
     m = _MigrationVersion(current_version=version)
     m.save()
-    _log.debug('Set datahub migration version to %d', version)
+    _log.info('Set datahub migration version to %d', version)
 
 ### Migration steps ###
 
 def _migration_step_0():
-    _log.debug('Creating datahub_migration table')
-    _datahub_migration_table.create()
+    _create_table(_datahub_migration_table)
 
 def _migration_step_1():
-    _log.debug('Creating datahub_paid_services table.')
-    _datahub_paid_service_table.create()
-    _log.debug('Creating datahub_paid_service_to_users table.')
-    _datahub_paid_service_to_users_table.create()
+    _create_table(_datahub_paid_service_table)
+    _create_table(_datahub_paid_service_to_users_table)
 
+def _create_table(t):
+    if not t.exists():
+        _log.info('Creating %s table', t.name)
+        t.create()
