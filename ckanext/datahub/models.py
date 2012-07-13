@@ -139,7 +139,7 @@ def _run_migration_step(version):
     _log.debug('Running datahub migration step %d', version)
     if version == 0:
         _migration_step_0()
-    if version == 1:
+    elif version == 1:
         _migration_step_1()
     else:
         raise Exception('Cannot run datahub migration step %d' % version)
