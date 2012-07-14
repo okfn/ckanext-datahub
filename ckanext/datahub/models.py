@@ -82,6 +82,8 @@ def _define_datahub_tables():
                    primary_key=True),
         sql.Column('name',
                    sql.types.UnicodeText,
+                   sql.CheckConstraint("""name <> ''"""),
+                   unique=True,
                    nullable=False),
     )
 

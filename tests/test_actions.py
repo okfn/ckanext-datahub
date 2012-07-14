@@ -1,4 +1,4 @@
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_raises
 
 import ckan.logic as logic
 import ckan.model as model
@@ -46,4 +46,69 @@ class TestPaidServiceActions(object):
         data_dict = {'name': 'enterprise-level'}
         result = logic.get_action('datahub_paid_service_create')(context, data_dict)
         assert_equal('enterprise-level', result['name'])
+
+    def test_create_new_paid_service_as_normal_user(self):
+        '''"Normal" logged-in users should not be able to create PaidServices'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': model.User.by_name('tester'),
+        }
+
+        data_dict = {'name': 'enterprise-level'}
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('datahub_paid_service_create'),
+            context, data_dict)
+
+    def test_create_new_paid_service_as_anonymous_user(self):
+        '''Anonymous users should not be able to create PaidServices'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+        }
+
+        data_dict = {'name': 'enterprise-level'}
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('datahub_paid_service_create'),
+            context, data_dict)
+
+    def test_create_paid_service_with_duplicate_name(self):
+        '''PaidService names should be unique'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': model.User.by_name('testsysadmin'),
+        }
+
+        data_dict = {'name': 'enterprise-level'}
+        result = logic.get_action('datahub_paid_service_create')(context, data_dict)
+        assert_equal('enterprise-level', result['name'])
+
+        ## Now, try to create a new PaidService of the same name.
+        assert_raises(
+            logic.ValidationError,
+            logic.get_action('datahub_paid_service_create'),
+            context, data_dict)
+
+    def test_create_paid_service_with_empty_name(self):
+        '''PaidService names should not be empty'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': model.User.by_name('testsysadmin'),
+        }
+
+        data_dict = {'name': ''}
+        assert_raises(
+            logic.ValidationError,
+            logic.get_action('datahub_paid_service_create'),
+            context, data_dict)
 

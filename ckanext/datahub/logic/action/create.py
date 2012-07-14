@@ -37,7 +37,7 @@ def datahub_paid_service_create(context, data_dict):
 
     schema = context.get('schema') or dh_schema.default_paid_service_schema()
 
-    data, errors = _validate(data_dict, schema)
+    data, errors = _validate(data_dict, schema, context=context)
 
     if errors:
         session.rollback()

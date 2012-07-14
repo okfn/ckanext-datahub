@@ -2,11 +2,15 @@
 Schemas specific to the datahub plugin.
 '''
 
-from ckan.lib.navl.validators import not_empty
-from ckan.logic.validators import name_validator
+import ckan.lib.navl.validators as navl_validators
+import ckan.logic.validators as validators
 
+import ckanext.datahub.validators as dh_validators
 
 def default_paid_service_schema():
     return {
-        'name': [not_empty, unicode, name_validator],
+        'name': [navl_validators.not_empty,
+                 unicode,
+                 validators.name_validator,
+                 dh_validators.paid_service_name_does_not_clash],
     }
