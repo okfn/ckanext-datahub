@@ -9,6 +9,8 @@ class DataHub(p.SingletonPlugin):
 
     p.implements(p.IConfigurer)
     p.implements(p.IConfigurable)
+    p.implements(p.IActions)
+    p.implements(p.IAuthFunctions)
 
     def update_config(self, config):
         p.toolkit.add_template_directory(config, 'templates')
@@ -17,3 +19,22 @@ class DataHub(p.SingletonPlugin):
     def configure(self, config):
         '''Ensure model tables are in place'''
         dh_models.setup()
+
+    def get_actions(self):
+        from ckanext.datahub.logic.action.get import datahub_paid_service_show
+        from ckanext.datahub.logic.action.create import datahub_paid_service_create
+
+        return {
+            'datahub_paid_service_show': datahub_paid_service_show,
+            'datahub_paid_service_create': datahub_paid_service_create
+        }
+
+    def get_auth_functions(self):
+
+        from ckanext.datahub.logic.auth.get import datahub_paid_service_show
+        from ckanext.datahub.logic.auth.create import datahub_paid_service_create
+
+        return {
+            'datahub_paid_service_show': datahub_paid_service_show,
+            'datahub_paid_service_create': datahub_paid_service_create
+        }
