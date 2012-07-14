@@ -2,6 +2,7 @@ import ckan.plugins as p
 
 import ckanext.datahub.models as dh_models
 
+
 class DataHub(p.SingletonPlugin):
     '''
     This plugin provides customisation specific to datahub.
@@ -21,8 +22,10 @@ class DataHub(p.SingletonPlugin):
         dh_models.setup()
 
     def get_actions(self):
-        from ckanext.datahub.logic.action.get import datahub_paid_service_show
-        from ckanext.datahub.logic.action.create import datahub_paid_service_create
+        from ckanext.datahub.logic.action.get import (
+            datahub_paid_service_show)
+        from ckanext.datahub.logic.action.create import (
+            datahub_paid_service_create)
 
         return {
             'datahub_paid_service_show': datahub_paid_service_show,
@@ -31,8 +34,10 @@ class DataHub(p.SingletonPlugin):
 
     def get_auth_functions(self):
 
-        from ckanext.datahub.logic.auth.get import datahub_paid_service_show
-        from ckanext.datahub.logic.auth.create import datahub_paid_service_create
+        from ckanext.datahub.logic.auth.get import (
+            datahub_paid_service_show)
+        from ckanext.datahub.logic.auth.create import (
+            datahub_paid_service_create)
 
         return {
             'datahub_paid_service_show': datahub_paid_service_show,
