@@ -23,23 +23,37 @@ class DataHub(p.SingletonPlugin):
 
     def get_actions(self):
         from ckanext.datahub.logic.action.get import (
-            datahub_paid_service_show)
+            datahub_paid_service_show,
+            datahub_paid_service_list)
+
         from ckanext.datahub.logic.action.create import (
             datahub_paid_service_create)
 
+        from ckanext.datahub.logic.action.update import (
+            datahub_paid_service_add_user)
+
         return {
+            'datahub_paid_service_add_user': datahub_paid_service_add_user,
+            'datahub_paid_service_create': datahub_paid_service_create,
+            'datahub_paid_service_list': datahub_paid_service_list,
             'datahub_paid_service_show': datahub_paid_service_show,
-            'datahub_paid_service_create': datahub_paid_service_create
         }
 
     def get_auth_functions(self):
 
         from ckanext.datahub.logic.auth.get import (
-            datahub_paid_service_show)
+            datahub_paid_service_show,
+            datahub_paid_service_list)
+
         from ckanext.datahub.logic.auth.create import (
             datahub_paid_service_create)
 
+        from ckanext.datahub.logic.auth.update import (
+            datahub_paid_service_add_user)
+
         return {
+            'datahub_paid_service_add_user': datahub_paid_service_add_user,
+            'datahub_paid_service_create': datahub_paid_service_create,
+            'datahub_paid_service_list': datahub_paid_service_list,
             'datahub_paid_service_show': datahub_paid_service_show,
-            'datahub_paid_service_create': datahub_paid_service_create
         }

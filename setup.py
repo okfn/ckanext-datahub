@@ -26,5 +26,8 @@ setup(
 	"""
         [ckan.plugins]
 	    datahub=ckanext.datahub.plugin:DataHub
+
+        [paste.paster_command]
+        datahub=ckanext.datahub.commands:DatahubCommand
 	""",
 )

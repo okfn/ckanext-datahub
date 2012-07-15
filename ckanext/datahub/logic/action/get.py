@@ -43,3 +43,25 @@ def datahub_paid_service_show(context, data_dict):
         raise NotFound
 
     return dh_dictization.paid_service_dictize(paid_service, context)
+
+def datahub_paid_service_list(context, data_dict):
+    '''List existing PaidServices
+
+    Optionally filtered by name.
+    '''
+
+    _check_access('datahub_paid_service_list', context, data_dict)
+
+    session = context['session']
+
+    names = data_dict.get('names', [])
+    if isinstance(names, basestring):
+        names = [names]
+    
+    q = session.query(dh_models.PaidService).\
+                outerjoin(dh_models.PaidService.users)
+    if names:
+        q = q.filter(dh_models.PaidService.name.in_(names))
+
+    extended_context = dict(include_users=True, **context)
+    return dh_dictization.paid_service_list_dictize(q, extended_context)
