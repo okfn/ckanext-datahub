@@ -28,29 +28,29 @@ ValidationError = logic.ValidationError
 NotFound = logic.NotFound
 
 
-def datahub_paid_service_show(context, data_dict):
-    '''Show an existing PaidService
+def datahub_payment_plan_show(context, data_dict):
+    '''Show an existing PaymentPlan
 
     Identified by name.
     '''
 
-    _check_access('datahub_paid_service_show', context, data_dict)
+    _check_access('datahub_payment_plan_show', context, data_dict)
 
     name = _get_or_bust(data_dict, 'name')
-    paid_service = dh_models.PaidService.by_name(name)
+    payment_plan = dh_models.PaymentPlan.by_name(name)
 
-    if not paid_service:
+    if not payment_plan:
         raise NotFound
 
-    return dh_dictization.paid_service_dictize(paid_service, context)
+    return dh_dictization.payment_plan_dictize(payment_plan, context)
 
-def datahub_paid_service_list(context, data_dict):
-    '''List existing PaidServices
+def datahub_payment_plan_list(context, data_dict):
+    '''List existing PaymentPlans
 
     Optionally filtered by name.
     '''
 
-    _check_access('datahub_paid_service_list', context, data_dict)
+    _check_access('datahub_payment_plan_list', context, data_dict)
 
     session = context['session']
 
@@ -58,10 +58,10 @@ def datahub_paid_service_list(context, data_dict):
     if isinstance(names, basestring):
         names = [names]
     
-    q = session.query(dh_models.PaidService).\
-                outerjoin(dh_models.PaidService.users)
+    q = session.query(dh_models.PaymentPlan).\
+                outerjoin(dh_models.PaymentPlan.users)
     if names:
-        q = q.filter(dh_models.PaidService.name.in_(names))
+        q = q.filter(dh_models.PaymentPlan.name.in_(names))
 
     extended_context = dict(include_users=True, **context)
-    return dh_dictization.paid_service_list_dictize(q, extended_context)
+    return dh_dictization.payment_plan_list_dictize(q, extended_context)

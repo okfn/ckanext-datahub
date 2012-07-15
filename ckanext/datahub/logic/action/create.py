@@ -27,15 +27,15 @@ _validate = ckan.lib.navl.dictization_functions.validate
 ValidationError = logic.ValidationError
 
 
-def datahub_paid_service_create(context, data_dict):
-    '''Creates a new PaidService'''
+def datahub_payment_plan_create(context, data_dict):
+    '''Creates a new PaymentPlan'''
 
-    _check_access('datahub_paid_service_create', context, data_dict)
+    _check_access('datahub_payment_plan_create', context, data_dict)
 
     model = context['model']
     session = context['session']
 
-    schema = context.get('schema') or dh_schema.default_paid_service_schema()
+    schema = context.get('schema') or dh_schema.default_payment_plan_schema()
 
     data, errors = _validate(data_dict, schema, context=context)
 
@@ -44,9 +44,9 @@ def datahub_paid_service_create(context, data_dict):
         raise ValidationError(errors, _error_summary(errors))
 
     name = data.get('name')
-    service = dh_models.PaidService(name=name)
+    service = dh_models.PaymentPlan(name=name)
     session.add(service)
 
     model.repo.commit()
-    _log.debug('Created new PaidService: %s', name)
-    return _get_action('datahub_paid_service_show')(context, {'name': name})
+    _log.debug('Created new PaymentPlan: %s', name)
+    return _get_action('datahub_payment_plan_show')(context, {'name': name})

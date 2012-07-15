@@ -11,7 +11,7 @@ import ckanext.datahub.models as dh_models
 CreateTestData = ckan.tests.CreateTestData
 
 
-class TestPaidServiceActions(object):
+class TestPaymentPlanActions(object):
 
     @classmethod
     def setup_class(cls):
@@ -26,7 +26,7 @@ class TestPaidServiceActions(object):
     def tearDown(self):
         CreateTestData.delete()
 
-        for service in model.Session.query(dh_models.PaidService):
+        for service in model.Session.query(dh_models.PaymentPlan):
             service.purge()
         model.Session.commit()
         model.Session.remove()
@@ -36,8 +36,8 @@ class TestPaidServiceActions(object):
         model.Session.close_all()
         model.repo.clean_db()
 
-    def test_create_new_paid_service_as_sysadmin(self):
-        '''Sysadmins should be able to create new PaidServices'''
+    def test_create_new_payment_plan_as_sysadmin(self):
+        '''Sysadmins should be able to create new PaymentPlans'''
 
         context = {
             'model': model,
@@ -46,11 +46,11 @@ class TestPaidServiceActions(object):
         }
 
         data_dict = {'name': 'enterprise-level'}
-        result = logic.get_action('datahub_paid_service_create')(context, data_dict)
+        result = logic.get_action('datahub_payment_plan_create')(context, data_dict)
         assert_equal('enterprise-level', result['name'])
 
-    def test_create_new_paid_service_as_normal_user(self):
-        '''"Normal" logged-in users should not be able to create PaidServices'''
+    def test_create_new_payment_plan_as_normal_user(self):
+        '''"Normal" logged-in users should not be able to create PaymentPlans'''
         
         context = {
             'model': model,
@@ -62,11 +62,11 @@ class TestPaidServiceActions(object):
 
         assert_raises(
             logic.NotAuthorized,
-            logic.get_action('datahub_paid_service_create'),
+            logic.get_action('datahub_payment_plan_create'),
             context, data_dict)
 
-    def test_create_new_paid_service_as_anonymous_user(self):
-        '''Anonymous users should not be able to create PaidServices'''
+    def test_create_new_payment_plan_as_anonymous_user(self):
+        '''Anonymous users should not be able to create PaymentPlans'''
         
         context = {
             'model': model,
@@ -77,11 +77,11 @@ class TestPaidServiceActions(object):
 
         assert_raises(
             logic.NotAuthorized,
-            logic.get_action('datahub_paid_service_create'),
+            logic.get_action('datahub_payment_plan_create'),
             context, data_dict)
 
-    def test_create_paid_service_with_duplicate_name(self):
-        '''PaidService names should be unique'''
+    def test_create_payment_plan_with_duplicate_name(self):
+        '''PaymentPlan names should be unique'''
 
         context = {
             'model': model,
@@ -90,17 +90,17 @@ class TestPaidServiceActions(object):
         }
 
         data_dict = {'name': 'enterprise-level'}
-        result = logic.get_action('datahub_paid_service_create')(context, data_dict)
+        result = logic.get_action('datahub_payment_plan_create')(context, data_dict)
         assert_equal('enterprise-level', result['name'])
 
-        ## Now, try to create a new PaidService of the same name.
+        ## Now, try to create a new PaymentPlan of the same name.
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_paid_service_create'),
+            logic.get_action('datahub_payment_plan_create'),
             context, data_dict)
 
-    def test_create_paid_service_with_empty_name(self):
-        '''PaidService names should not be empty'''
+    def test_create_payment_plan_with_empty_name(self):
+        '''PaymentPlan names should not be empty'''
 
         context = {
             'model': model,
@@ -111,11 +111,11 @@ class TestPaidServiceActions(object):
         data_dict = {'name': ''}
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_paid_service_create'),
+            logic.get_action('datahub_payment_plan_create'),
             context, data_dict)
 
-    def test_add_existing_user_to_existing_paid_service(self):
-        '''Add user with no paid service to an existing paid service'''
+    def test_add_existing_user_to_existing_payment_plan(self):
+        '''Add user with no payment plan to an existing payment plan'''
 
         context = {
             'model': model,
@@ -123,21 +123,21 @@ class TestPaidServiceActions(object):
             'user': model.User.by_name('testsysadmin'),
         }
 
-        # Create the enterpise PaidService first.
-        logic.get_action('datahub_paid_service_create')(
+        # Create the enterpise PaymentPlan first.
+        logic.get_action('datahub_payment_plan_create')(
             context,
             {'name': 'enterprise'})
 
         # And add the User to it
-        result = logic.get_action('datahub_paid_service_add_user')(
+        result = logic.get_action('datahub_payment_plan_add_user')(
             context,
-            {'paid_service': 'enterprise',
+            {'payment_plan': 'enterprise',
              'user': 'tester'})
 
         assert_equal(result['name'], 'enterprise')
         assert_equal(result['users'][0]['name'], 'tester') 
 
-    def test_add_non_existant_user_to_existing_paid_service(self):
+    def test_add_non_existant_user_to_existing_payment_plan(self):
         '''Should fail if the user does not exist'''
         
         context = {
@@ -146,21 +146,21 @@ class TestPaidServiceActions(object):
             'user': model.User.by_name('testsysadmin'),
         }
 
-        # Create the enterpise PaidService first.
-        logic.get_action('datahub_paid_service_create')(
+        # Create the enterpise PaymentPlan first.
+        logic.get_action('datahub_payment_plan_create')(
             context,
             {'name': 'enterprise'})
 
         # And add a non-existant User to it
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_paid_service_add_user'),
+            logic.get_action('datahub_payment_plan_add_user'),
             context,
-            {'paid_service': 'enterprise',
+            {'payment_plan': 'enterprise',
              'user': 'i-do-not-exist'})
 
-    def test_add_user_to_non_existant_paid_service(self):
-        '''Should fail if the paid service does not exist'''
+    def test_add_user_to_non_existant_payment_plan(self):
+        '''Should fail if the payment plan does not exist'''
 
         context = {
             'model': model,
@@ -170,12 +170,12 @@ class TestPaidServiceActions(object):
 
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_paid_service_add_user'),
+            logic.get_action('datahub_payment_plan_add_user'),
             context,
-            {'paid_service': 'does-not-exist',
+            {'payment_plan': 'does-not-exist',
              'user': 'tester'})
 
-    def test_list_paid_service_lists_all_services(self):
+    def test_list_payment_plan_lists_all_services(self):
         '''Lists all services and users which belong to them'''
 
         context = {
@@ -184,17 +184,17 @@ class TestPaidServiceActions(object):
             'user': model.User.by_name('testsysadmin'),
         }
 
-        # Create some PaidServices first
-        create_action = logic.get_action('datahub_paid_service_create')
+        # Create some PaymentPlans first
+        create_action = logic.get_action('datahub_payment_plan_create')
         for name in 'enterprise small-business individual'.split():
             data_dict = {'name': name}
             create_action(context, data_dict)
 
-        # Add some users to the PaidServices
-        add_action = logic.get_action('datahub_paid_service_add_user')
-        def add_user_to(paid_service_name, username):
+        # Add some users to the PaymentPlans
+        add_action = logic.get_action('datahub_payment_plan_add_user')
+        def add_user_to(payment_plan_name, username):
             data_dict = {
-                'paid_service': paid_service_name,
+                'payment_plan': payment_plan_name,
                 'user': username,
             }
             add_action(context, data_dict)
@@ -203,14 +203,14 @@ class TestPaidServiceActions(object):
         add_user_to('enterprise', 'joeadmin')
         add_user_to('individual', 'annafan')
 
-        # Retrieve list of PaidServices
+        # Retrieve list of PaymentPlans
         data_dict = {}
-        result = logic.get_action('datahub_paid_service_list')(
+        result = logic.get_action('datahub_payment_plan_list')(
             context,
             data_dict)
 
         # Assertions
-        assert_equal(len(result), 3) # 3 paid services.
+        assert_equal(len(result), 3) # 3 payment plans.
         
         enterprise, individual, small_business = [ ps for ps in \
                 sorted(result, key=operator.itemgetter('name')) ]
@@ -219,7 +219,7 @@ class TestPaidServiceActions(object):
         assert_equal(len(individual['users']), 1)
         assert_equal(len(small_business['users']), 0)
     
-    def test_list_paid_service_lists_selected_services(self):
+    def test_list_payment_plan_lists_selected_services(self):
         '''Lists selected services and users which belong to them'''
 
         context = {
@@ -228,16 +228,16 @@ class TestPaidServiceActions(object):
             'user': model.User.by_name('testsysadmin'),
         }
 
-        # Create some PaidServices first
-        create_action = logic.get_action('datahub_paid_service_create')
+        # Create some PaymentPlans first
+        create_action = logic.get_action('datahub_payment_plan_create')
         for name in 'enterprise small-business individual'.split():
             data_dict = {'name': name}
             create_action(context, data_dict)
 
-        # Retrieve list of PaidServices
+        # Retrieve list of PaymentPlans
         data_dict = {'names': ['enterprise', 'small-business']}
-        result = logic.get_action('datahub_paid_service_list')(
+        result = logic.get_action('datahub_payment_plan_list')(
             context,
             data_dict)
 
-        assert_equal(len(result), 2) # 2 paid services.
+        assert_equal(len(result), 2) # 2 payment plans.

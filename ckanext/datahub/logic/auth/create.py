@@ -9,15 +9,15 @@ from ckan.lib.base import _
 import ckan.authz as authz
 
 
-def datahub_paid_service_create(context, data_dict):
-    '''Only allow sysadmins to create PaidServices'''
+def datahub_payment_plan_create(context, data_dict):
+    '''Only allow sysadmins to create PaymentPlans'''
     user = context.get('user')
 
     if not authz.Authorizer().is_sysadmin(user):
         return {
             'success': False,
             'msg': _('User {user} is not authorized to create '
-                     'new paid services.').format(user=str(user))
+                     'new payment plans.').format(user=str(user))
         }
     else:
         return {'success': True}

@@ -76,7 +76,7 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
     def create_plan(self, plan):
         '''Create a new payment plan'''
         data_dict = {'name': plan}
-        result = logic.get_action('datahub_paid_service_create')(
+        result = logic.get_action('datahub_payment_plan_create')(
             self.context,
             data_dict)
         print 'Created payment plan: %s (%s)' % (
@@ -87,7 +87,7 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         '''List paying users of the given plans'''
         
         data_dict = {'names': plans}
-        plans = logic.get_action('datahub_paid_service_list')(
+        plans = logic.get_action('datahub_payment_plan_list')(
             self.context,
             data_dict)
         titles = [ plan['name'] for plan in plans ]
@@ -100,9 +100,9 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         '''Add given user to plan'''
         data_dict = {
             'user': user,
-            'paid_service': plan}
+            'payment_plan': plan}
 
-        logic.get_action('datahub_paid_service_add_user')(
+        logic.get_action('datahub_payment_plan_add_user')(
             self.context,
             data_dict)
 

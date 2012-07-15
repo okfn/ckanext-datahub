@@ -27,10 +27,10 @@ _validate = ckan.lib.navl.dictization_functions.validate
 ValidationError = logic.ValidationError
 
 
-def datahub_paid_service_add_user(context, data_dict):
-    '''Add an existing user to an existing paid service'''
+def datahub_payment_plan_add_user(context, data_dict):
+    '''Add an existing user to an existing payment plan'''
 
-    _check_access('datahub_paid_service_add_user', context, data_dict)
+    _check_access('datahub_payment_plan_add_user', context, data_dict)
 
     model = context['model']
 
@@ -40,19 +40,19 @@ def datahub_paid_service_add_user(context, data_dict):
     if not user:
         raise ValidationError(_('Unknown user {user}').format(user=username))
 
-    # Existing PaidService
-    paid_service_name = _get_or_bust(data_dict, 'paid_service')
-    paid_service = dh_models.PaidService.by_name(paid_service_name)
-    if not paid_service:
-        raise ValidationError(_('Unknown paid service {paid_service}')
-                                .format(paid_service=paid_service_name))
+    # Existing PaymentPlan
+    payment_plan_name = _get_or_bust(data_dict, 'payment_plan')
+    payment_plan = dh_models.PaymentPlan.by_name(payment_plan_name)
+    if not payment_plan:
+        raise ValidationError(_('Unknown payment plan {payment_plan}')
+                                .format(payment_plan=payment_plan_name))
 
-    user.paid_service = paid_service
+    user.payment_plan = payment_plan
     model.repo.commit()
-    _log.debug('User %s paid service changed to %s',
-               username, paid_service_name)
+    _log.debug('User %s payment plan changed to %s',
+               username, payment_plan_name)
 
     extended_context = dict(include_users=True, **context)
-    return _get_action('datahub_paid_service_show')(
+    return _get_action('datahub_payment_plan_show')(
         extended_context,
-        {'name': paid_service_name})
+        {'name': payment_plan_name})

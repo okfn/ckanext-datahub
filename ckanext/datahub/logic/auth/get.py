@@ -9,29 +9,29 @@ from ckan.lib.base import _
 import ckan.authz as authz
 
 
-def datahub_paid_service_show(context, data_dict):
-    '''Only allow sysadmins to view PaidServices'''
+def datahub_payment_plan_show(context, data_dict):
+    '''Only allow sysadmins to view PaymentPlans'''
     user = context.get('user')
 
     if not authz.Authorizer().is_sysadmin(user):
         return {
             'success': False,
             'msg': _('User {user} is not authorized to view this '
-                     'paid service.').format(user=str(user))
+                     'payment plan.').format(user=str(user))
         }
     else:
         return {'success': True}
 
 
-def datahub_paid_service_list(context, data_dict):
-    '''Only allow sysadmins to view PaidServices'''
+def datahub_payment_plan_list(context, data_dict):
+    '''Only allow sysadmins to view PaymentPlans'''
     user = context.get('user')
 
     if not authz.Authorizer().is_sysadmin(user):
         return {
             'success': False,
             'msg': _('User {user} is not authorized to view this '
-                     'paid service.').format(user=str(user))
+                     'payment plan.').format(user=str(user))
         }
     else:
         return {'success': True}
