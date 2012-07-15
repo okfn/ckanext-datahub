@@ -452,3 +452,42 @@ class TestUserActions(object):
         user = model.User.by_name('a-new-user')
         assert_equal(user, None)
 
+    def test_user_update_without_payment_plan_as_sysadmin(self):
+        '''Updating an existing user as sysadmin works as usual.'''
+        pass
+
+    def test_user_update_without_payment_plan_as_the_user(self):
+        '''A user can update their own User as usual.'''
+        pass
+
+    def test_user_update_with_null_payment_plan_as_sysadmin(self):
+        '''Removing a user's payment plan as sysadmin is allowed'''
+        pass
+
+    def test_user_update_with_valid_payment_plan_as_sysadmin(self):
+        '''Setting a user's payment plan as sysadmin is allowed.'''
+        pass
+
+    def test_user_update_with_null_payment_plan_as_that_user(self):
+        '''A user cannot remove their own payment plan'''
+        pass
+
+    def test_user_update_with_valid_payment_plan_as_that_user(self):
+        '''A user cannot set their own payment plan.'''
+        pass
+
+    def test_user_update_with_no_payment_plan_as_other_user(self):
+        '''A user cannot update another user.'''
+        pass
+
+    def test_user_update_with_null_payment_plan_as_other_user(self):
+        '''A user cannot remove another user's payment plan'''
+        pass
+
+    def test_user_update_with_valid_payment_plan_as_other_user(self):
+        '''A user cannot set the payment plan of another user.'''
+        pass
+
+    def test_user_update_with_invalid_payment_plan_as_sysadmin(self):
+        '''Cannot move a user to a non-existant payment plan'''
+        pass

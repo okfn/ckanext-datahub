@@ -69,3 +69,52 @@ def datahub_user_set_payment_plan(context, data_dict):
             {'name': payment_plan_name})
     else:
         return None
+
+def user_update(context, data_dict):
+    '''Override core user_update() action.
+
+    In addition to the normal update action, sysadmins can set the payment
+    plan of a User
+
+    If there's a `payment_plan` field on the data_dict, then create the new
+    User, adding them to that payment_plan.  This uses the
+    `datahub_user_set_payment_plan` action, so that correct authorization rules
+    are applied.
+
+    If there's no `payment_plan` field then the action behaves no differently
+    than ckan core's behaviour.
+
+    Note that we don't allow users to set their own payment plan **at all**.
+    We don't want users to inadvertantly set their payment plan to None!
+    '''
+
+    session = context['session']
+
+    is_payment_plan = 'payment_plan' in data_dict
+    payment_plan = data_dict.pop('payment_plan', None)
+
+    # The context for the core update_user action invocation.
+    update_user_context = context.copy()
+    update_user_context['defer_commit'] = is_payment_plan
+
+    # Update the User as per usual.
+    user = logic.action.update.user_update(update_user_context, data_dict)
+
+    if is_payment_plan:
+        # Note: The try-block is necessary as we've created the User
+        # un-conditionally, and need to roll it back if the set_payment_plan
+        # fails due to not being authorized.
+        #
+        # This is true even if we explicitely run
+        # `_check_access('datahub_user_set_payment_plan')` beforehand, as there
+        # may be other checks in the `set_payment_plan` action that we're not
+        # aware of.
+        try:
+            _get_action('datahub_user_set_payment_plan')(
+                context,
+                {'user': user['name'],
+                'payment_plan': payment_plan})
+
+        except logic.NotAuthorized:
+            session.rollback()
+            raise

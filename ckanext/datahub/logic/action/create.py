@@ -66,7 +66,7 @@ def user_create(context, data_dict):
     session = context['session']
 
     payment_plan = data_dict.pop('payment_plan', None)
-    
+
     # The context for the core create_user action invocation.
     create_user_context = context.copy()
     create_user_context['defer_commit'] = payment_plan is not None
