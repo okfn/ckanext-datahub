@@ -27,7 +27,8 @@ class DataHub(p.SingletonPlugin):
             datahub_payment_plan_list)
 
         from ckanext.datahub.logic.action.create import (
-            datahub_payment_plan_create)
+            datahub_payment_plan_create,
+            user_create)
 
         from ckanext.datahub.logic.action.update import (
             datahub_user_set_payment_plan)
@@ -37,6 +38,7 @@ class DataHub(p.SingletonPlugin):
             'datahub_payment_plan_create': datahub_payment_plan_create,
             'datahub_payment_plan_list': datahub_payment_plan_list,
             'datahub_payment_plan_show': datahub_payment_plan_show,
+            'user_create': user_create,
         }
 
     def get_auth_functions(self):

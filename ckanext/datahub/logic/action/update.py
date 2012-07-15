@@ -29,7 +29,7 @@ ValidationError = logic.ValidationError
 
 def datahub_user_set_payment_plan(context, data_dict):
     '''Set the User's payment plan.
-    
+
     A User can be removed from an existing PaymentPlan by setting their
     payment_plan to None.
     '''
@@ -37,11 +37,13 @@ def datahub_user_set_payment_plan(context, data_dict):
     _check_access('datahub_user_set_payment_plan', context, data_dict)
 
     model = context['model']
+    session = context['session']
 
     # Existing User
     username = _get_or_bust(data_dict, 'user')
     user = model.User.by_name(username)
     if not user:
+        session.rollback()
         raise ValidationError(_('Unknown user {user}').format(user=username))
 
     # Existing PaymentPlan
@@ -49,6 +51,7 @@ def datahub_user_set_payment_plan(context, data_dict):
     if isinstance(payment_plan_name, basestring):
         payment_plan = dh_models.PaymentPlan.by_name(payment_plan_name)
         if not payment_plan:
+            session.rollback()
             raise ValidationError(_('Unknown payment plan {payment_plan}')
                                     .format(payment_plan=payment_plan_name))
     elif payment_plan_name is None:

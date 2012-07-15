@@ -1,6 +1,6 @@
 import operator
 
-from nose.tools import assert_equal, assert_raises
+from nose.tools import assert_equal, assert_raises, assert_not_equal
 
 import ckan.logic as logic
 import ckan.model as model
@@ -278,3 +278,177 @@ class TestPaymentPlanActions(object):
             data_dict)
 
         assert_equal(len(result), 2) # 2 payment plans.
+
+class TestUserActions(object):
+    '''Tests for the override user_create and user_update actions.'''
+
+    @classmethod
+    def setup_class(cls):
+        dh_models.setup()
+
+    def setUp(self):
+        CreateTestData.create_basic_test_data()
+
+    def tearDown(self):
+        CreateTestData.delete()
+
+        new_user = model.User.by_name('a-new-user')
+        if new_user:
+            new_user.purge()
+
+        for service in model.Session.query(dh_models.PaymentPlan):
+            service.purge()
+
+        model.Session.commit()
+        model.Session.remove()
+
+    @classmethod
+    def teardown_class(cls):
+        model.Session.close_all()
+        model.repo.clean_db()
+
+    def test_user_create_without_payment_plan_as_sysadmin(self):
+        '''Creating a new user without a payment plan set works as normal'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        logic.get_action('user_create')(
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com'})
+
+        user = model.User.by_name('a-new-user')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+
+    def test_user_create_with_null_payment_plan_as_sysadmin(self):
+        '''Creating a new user without null payment plan works as normal'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        logic.get_action('user_create')(
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com',
+             'payment_plan': None})
+
+        user = model.User.by_name('a-new-user')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+
+    def test_user_create_without_payment_plan_as_normal_user(self):
+        '''Normal users should still be able to create new Users'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'tester',
+        }
+
+        logic.get_action('user_create')(
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com'})
+
+        user = model.User.by_name('a-new-user')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+
+    def test_user_create_with_payment_plan_as_sysadmin(self):
+        '''Create a new user as sysadmin, belonging to a payment plan'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        # Create a payment plan first
+        logic.get_action('datahub_payment_plan_create')(
+            context,
+            {'name': 'enterprise'})
+        payment_plan = dh_models.PaymentPlan.by_name('enterprise')
+        assert_not_equal(payment_plan, None)
+
+        # Now create a User, belonging to the new payment plan.
+        logic.get_action('user_create')(
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com',
+             'payment_plan': 'enterprise'})
+
+        user = model.User.by_name('a-new-user')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, payment_plan)
+
+    def test_user_create_with_payment_plan_as_logged_in_user(self):
+        '''Normal users cannot create new Users belonging to a payment plan'''
+
+        sysadmin_context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'tester',
+        }
+
+        # Create a payment plan (as sysadmin) first
+        logic.get_action('datahub_payment_plan_create')(
+            sysadmin_context,
+            {'name': 'enterprise'})
+        payment_plan = dh_models.PaymentPlan.by_name('enterprise')
+        assert_not_equal(payment_plan, None)
+
+        # Now try to create a User, belonging to the new payment plan.
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_create'),
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com',
+             'payment_plan': 'enterprise'})
+
+        # And just double-check the User wan't created.
+        user = model.User.by_name('a-new-user')
+        assert_equal(user, None)
+
+    def test_user_create_with_invalid_payment_plan(self):
+        '''Cannot create user with non-existant payment plan'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        # Now try to create a User, belonging to the new payment plan.
+        assert_raises(
+            logic.ValidationError,
+            logic.get_action('user_create'),
+            context,
+            {'name': 'a-new-user',
+             'password': 'a-password',
+             'email': 'a-user@example.com',
+             'payment_plan': 'does-not-exist'})
+
+        # And just double-check the User wan't created.
+        user = model.User.by_name('a-new-user')
+        assert_equal(user, None)
+
