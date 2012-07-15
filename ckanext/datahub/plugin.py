@@ -30,10 +30,10 @@ class DataHub(p.SingletonPlugin):
             datahub_payment_plan_create)
 
         from ckanext.datahub.logic.action.update import (
-            datahub_payment_plan_add_user)
+            datahub_user_set_payment_plan)
 
         return {
-            'datahub_payment_plan_add_user': datahub_payment_plan_add_user,
+            'datahub_user_set_payment_plan': datahub_user_set_payment_plan,
             'datahub_payment_plan_create': datahub_payment_plan_create,
             'datahub_payment_plan_list': datahub_payment_plan_list,
             'datahub_payment_plan_show': datahub_payment_plan_show,
@@ -49,10 +49,10 @@ class DataHub(p.SingletonPlugin):
             datahub_payment_plan_create)
 
         from ckanext.datahub.logic.auth.update import (
-            datahub_payment_plan_add_user)
+            datahub_user_set_payment_plan)
 
         return {
-            'datahub_payment_plan_add_user': datahub_payment_plan_add_user,
+            'datahub_user_set_payment_plan': datahub_user_set_payment_plan,
             'datahub_payment_plan_create': datahub_payment_plan_create,
             'datahub_payment_plan_list': datahub_payment_plan_list,
             'datahub_payment_plan_show': datahub_payment_plan_show,

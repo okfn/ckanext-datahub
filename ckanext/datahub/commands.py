@@ -27,6 +27,9 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
 
       paster datahub set-payment-plan <user> <payment-plan> -c <config>
         - Add an existing user to an existing payment plan.
+
+      paster datahub remove-from-payment-plan <user> -c <config>
+        - Remove an existing User from their payment plan.
     Where:
 
       <user>          = a user name
@@ -69,6 +72,9 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         elif cmd == 'set-payment-plan':
             self.set_payment_plan(self.args[1], self.args[2])
 
+        elif cmd == 'remove-from-payment-plan':
+            self.remove_from_payment_plan(self.args[1])
+
         else:
             print 'Command %s not recognized.' % cmd
             sys.exit(1)
@@ -96,13 +102,26 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
 
         self._print_items(titles, stringss)
 
+    def remove_from_payment_plan(self, user):
+        '''Removes user from any payment plan they may belong to'''
+        data_dict = {
+            'user': user,
+            'payment_plan': None}
+
+        logic.get_action('datahub_user_set_payment_plan')(
+            self.context,
+            data_dict)
+
+        print '%s removed from payment plan.' % user
+
+
     def set_payment_plan(self, user, plan):
         '''Add given user to plan'''
         data_dict = {
             'user': user,
             'payment_plan': plan}
 
-        logic.get_action('datahub_payment_plan_add_user')(
+        logic.get_action('datahub_user_set_payment_plan')(
             self.context,
             data_dict)
 

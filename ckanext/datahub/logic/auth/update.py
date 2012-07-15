@@ -9,7 +9,7 @@ from ckan.lib.base import _
 import ckan.authz as authz
 
 
-def datahub_payment_plan_add_user(context, data_dict):
+def datahub_user_set_payment_plan(context, data_dict):
     '''Only allow sysadmins to add users to PaymentPlans'''
     user = context.get('user')
 

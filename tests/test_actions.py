@@ -129,7 +129,7 @@ class TestPaymentPlanActions(object):
             {'name': 'enterprise'})
 
         # And add the User to it
-        result = logic.get_action('datahub_payment_plan_add_user')(
+        result = logic.get_action('datahub_user_set_payment_plan')(
             context,
             {'payment_plan': 'enterprise',
              'user': 'tester'})
@@ -154,7 +154,7 @@ class TestPaymentPlanActions(object):
         # And add a non-existant User to it
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_payment_plan_add_user'),
+            logic.get_action('datahub_user_set_payment_plan'),
             context,
             {'payment_plan': 'enterprise',
              'user': 'i-do-not-exist'})
@@ -170,10 +170,47 @@ class TestPaymentPlanActions(object):
 
         assert_raises(
             logic.ValidationError,
-            logic.get_action('datahub_payment_plan_add_user'),
+            logic.get_action('datahub_user_set_payment_plan'),
             context,
             {'payment_plan': 'does-not-exist',
              'user': 'tester'})
+
+    def test_remove_user_from_payment_plan(self):
+        '''Remove a User from their payment plan.'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': model.User.by_name('testsysadmin'),
+        }
+
+        # Create the enterpise PaymentPlan first.
+        logic.get_action('datahub_payment_plan_create')(
+            context,
+            {'name': 'enterprise'})
+
+        # And add the User to it
+        result = logic.get_action('datahub_user_set_payment_plan')(
+            context,
+            {'payment_plan': 'enterprise',
+             'user': 'tester'})
+
+        # Check they are a member of it.
+        assert_equal(result['name'], 'enterprise')
+        assert_equal(result['users'][0]['name'], 'tester') 
+
+        # And now remove them from it.
+        result = logic.get_action('datahub_user_set_payment_plan')(
+            context,
+            {'payment_plan': None,
+             'user': 'tester'})
+        
+        # Check no payment plan was returned.
+        assert_equal(result, None)
+
+        # Check they are no longer a member of any payment plan.
+        user = model.User.by_name('tester')
+        assert_equal(user.payment_plan, None)
 
     def test_list_payment_plan_lists_all_services(self):
         '''Lists all services and users which belong to them'''
@@ -191,7 +228,7 @@ class TestPaymentPlanActions(object):
             create_action(context, data_dict)
 
         # Add some users to the PaymentPlans
-        add_action = logic.get_action('datahub_payment_plan_add_user')
+        add_action = logic.get_action('datahub_user_set_payment_plan')
         def add_user_to(payment_plan_name, username):
             data_dict = {
                 'payment_plan': payment_plan_name,
