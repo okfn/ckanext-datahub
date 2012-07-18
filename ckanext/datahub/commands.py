@@ -2,6 +2,7 @@ from itertools import izip_longest
 import logging
 import math
 import os
+import pprint
 import string
 import sys
 
@@ -61,23 +62,34 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
 
         cmd = self.args[0]
 
-        if cmd in ['--help', '-h', 'help']:
-            self.help()
-        elif cmd == 'list-paying-users':
-            self.list_paying_users(*self.args[1:])
+        try:
 
-        elif cmd == 'create-payment-plan':
-            self.create_plan(self.args[1])
+            if cmd in ['--help', '-h', 'help']:
+                self.help()
+            elif cmd == 'list-paying-users':
+                self.list_paying_users(*self.args[1:])
 
-        elif cmd == 'set-payment-plan':
-            self.set_payment_plan(self.args[1], self.args[2])
+            elif cmd == 'create-payment-plan':
+                if len(self.args) != 2:
+                    self._error('Expected <payment-plan> argument')
+                self.create_plan(self.args[1])
 
-        elif cmd == 'remove-from-payment-plan':
-            self.remove_from_payment_plan(self.args[1])
+            elif cmd == 'set-payment-plan':
+                if len(self.args) != 3:
+                    self._error('Expected <user> <payment-plan> arguments')
+                self.set_payment_plan(self.args[1], self.args[2])
 
-        else:
-            print 'Command %s not recognized.' % cmd
-            sys.exit(1)
+            elif cmd == 'remove-from-payment-plan':
+                if len(self.args) != 2:
+                    self._error('Expected <user> argument')
+                self.remove_from_payment_plan(self.args[1])
+
+            else:
+                print 'Command %s not recognized.' % cmd
+                sys.exit(1)
+        except logic.ValidationError, e:
+            msg = str(e) if str(e) else pprint.pformat(e.error_dict)
+            self._error('Validation Error %s' % msg)
 
     def create_plan(self, plan):
         '''Create a new payment plan'''
@@ -96,6 +108,15 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         plans = logic.get_action('datahub_payment_plan_list')(
             self.context,
             data_dict)
+
+        if len(plans) == 0:
+            print 'There are no payment plans defined.  To define one, run:'
+            cmd_to_run = ' '.join(sys.argv)\
+                            .replace('list-paying-users',
+                                     'create-payment-plan <payment-plan>')
+            print '\t' + cmd_to_run
+            sys.exit(0)
+
         titles = [ plan['name'] for plan in plans ]
         stringss = [ sorted([ user['name'] for user in plan['users'] ])
                         for plan in plans ]
@@ -195,3 +216,7 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         rows = [ map(expand_cell, row) for row in rows ]
         row_strings = [ ''.join(row) for row in rows ]
         print '\n'.join(row_strings)
+
+    def _error(self, msg):
+        print msg
+        sys.exit(1)
