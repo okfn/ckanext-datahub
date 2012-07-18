@@ -139,8 +139,15 @@ class TestPaymentPlanActions(object):
             {'payment_plan': 'enterprise',
              'user': 'tester'})
 
-        assert_equal(result['name'], 'enterprise')
-        assert_equal(result['users'][0]['name'], 'tester') 
+        assert_in('old_payment_plan', result)
+        assert_in('new_payment_plan', result)
+        old_payment_plan = result['old_payment_plan']
+        new_payment_plan = result['new_payment_plan']
+
+        assert_equal(old_payment_plan, None)
+
+        assert_equal(new_payment_plan['name'], 'enterprise')
+        assert_equal(new_payment_plan['users'][0]['name'], 'tester') 
 
     def test_add_non_existant_user_to_existing_payment_plan(self):
         '''Should fail if the user does not exist'''
@@ -200,9 +207,11 @@ class TestPaymentPlanActions(object):
             {'payment_plan': 'enterprise',
              'user': 'tester'})
 
-        # Check they are a member of it.
-        assert_equal(result['name'], 'enterprise')
-        assert_equal(result['users'][0]['name'], 'tester') 
+        # Check they are a member of the new plan.
+        assert_in('new_payment_plan', result)
+        new_payment_plan = result['new_payment_plan']
+        assert_equal(new_payment_plan['name'], 'enterprise')
+        assert_equal(new_payment_plan['users'][0]['name'], 'tester') 
 
         # And now remove them from it.
         result = logic.get_action('datahub_user_set_payment_plan')(
@@ -210,8 +219,12 @@ class TestPaymentPlanActions(object):
             {'payment_plan': None,
              'user': 'tester'})
         
-        # Check no payment plan was returned.
-        assert_equal(result, None)
+        assert_in('old_payment_plan', result)
+        assert_in('new_payment_plan', result)
+        new_payment_plan = result['new_payment_plan']
+
+        # Check new payment plan is None
+        assert_equal(new_payment_plan, None)
 
         # Check they are no longer a member of any payment plan.
         user = model.User.by_name('tester')

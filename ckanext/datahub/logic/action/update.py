@@ -16,6 +16,7 @@ import ckan
 from ckan.lib.base import _
 import ckan.logic as logic
 
+import ckanext.datahub.logic.dictization as dh_dictization
 import ckanext.datahub.models as dh_models
 
 _check_access = logic.check_access
@@ -39,12 +40,17 @@ def datahub_user_set_payment_plan(context, data_dict):
     model = context['model']
     session = context['session']
 
+    extended_context = context.copy()
+    extended_context.update(include_users=True)
+
     # Existing User
     username = _get_or_bust(data_dict, 'user')
     user = model.User.by_name(username)
     if not user:
         session.rollback()
         raise ValidationError(_('Unknown user {user}').format(user=username))
+    old_payment_plan = dh_dictization.payment_plan_dictize(user.payment_plan,
+                                                           extended_context)
 
     # Existing PaymentPlan
     payment_plan_name = _get_or_bust(data_dict, 'payment_plan')
@@ -62,14 +68,15 @@ def datahub_user_set_payment_plan(context, data_dict):
     _log.debug('User %s payment plan changed to %s',
                username, payment_plan_name)
 
-    if payment_plan:
-        extended_context = context.copy() # Don't alter caller's copy.
-        extended_context.update(include_users=True)
-        return _get_action('datahub_payment_plan_show')(
-            extended_context,
-            {'name': payment_plan_name})
-    else:
-        return None
+    new_payment_plan = dh_dictization.payment_plan_dictize(payment_plan,
+                                                           extended_context)
+
+    # Return the old plan and the new plan
+    return {
+        'old_payment_plan': old_payment_plan,
+        'new_payment_plan': new_payment_plan,
+    }
+
 
 def user_update(context, data_dict):
     '''Override core user_update() action.
