@@ -29,6 +29,7 @@ ValidationError = logic.ValidationError
 NotFound = logic.NotFound
 
 
+@logic.side_effect_free
 def datahub_payment_plan_show(context, data_dict):
     '''Show an existing PaymentPlan
 
@@ -45,6 +46,7 @@ def datahub_payment_plan_show(context, data_dict):
 
     return dh_dictization.payment_plan_dictize(payment_plan, context)
 
+@logic.side_effect_free
 def datahub_payment_plan_list(context, data_dict):
     '''List existing PaymentPlans
 
@@ -67,6 +69,7 @@ def datahub_payment_plan_list(context, data_dict):
     extended_context = dict(include_users=True, **context)
     return dh_dictization.payment_plan_list_dictize(q, extended_context)
 
+@logic.side_effect_free
 def user_show(context, data_dict):
     '''Return standard user account, augmented with payment plan.
 
