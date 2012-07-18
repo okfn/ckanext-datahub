@@ -63,7 +63,8 @@ def datahub_user_set_payment_plan(context, data_dict):
                username, payment_plan_name)
 
     if payment_plan:
-        extended_context = dict(include_users=True, **context)
+        extended_context = context.copy() # Don't alter caller's copy.
+        extended_context.update(include_users=True)
         return _get_action('datahub_payment_plan_show')(
             extended_context,
             {'name': payment_plan_name})

@@ -44,8 +44,8 @@ def datahub_payment_plan_show(context, data_dict):
     if not payment_plan:
         raise NotFound
 
-    extended_context = {'include_users': True}
-    extended_context.update(context)
+    extended_context = context.copy() # Don't modify caller's copy
+    extended_context.update(include_users=True)
     return dh_dictization.payment_plan_dictize(payment_plan, extended_context)
 
 @logic.side_effect_free
@@ -68,7 +68,8 @@ def datahub_payment_plan_list(context, data_dict):
     if names:
         q = q.filter(dh_models.PaymentPlan.name.in_(names))
 
-    extended_context = dict(include_users=True, **context)
+    extended_context = context.copy() # Don't modify caller's copy
+    extended_context.update(include_users=True)
     return dh_dictization.payment_plan_list_dictize(q, extended_context)
 
 @logic.side_effect_free
