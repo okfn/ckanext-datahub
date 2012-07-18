@@ -1,5 +1,5 @@
 '''
-Create actions specific to the datahub.
+"Create" actions specific to the datahub.
 
 This can be overriding existing ckan core actions, or it can be the creation
 of new actions.
@@ -26,9 +26,24 @@ _validate = ckan.lib.navl.dictization_functions.validate
 
 ValidationError = logic.ValidationError
 
+#------------------------------------------------------------------------------
+# Actions specific to the datahub extension
+#------------------------------------------------------------------------------
+
 
 def datahub_payment_plan_create(context, data_dict):
-    '''Creates a new PaymentPlan'''
+    '''Creates a new PaymentPlan
+    
+    You must be authorized to create new payment plans.
+
+    Required arguments:
+
+    :param name: the name of the new payment plan
+    :type name: string
+
+    :returns: a dictionary representation of the newly created payment plan.
+    :rtype: dictionary
+    '''
 
     _check_access('datahub_payment_plan_create', context, data_dict)
 
@@ -51,8 +66,13 @@ def datahub_payment_plan_create(context, data_dict):
     _log.debug('Created new PaymentPlan: %s', name)
     return _get_action('datahub_payment_plan_show')(context, {'name': name})
 
+#------------------------------------------------------------------------------
+# Actions that overide default CKAN behaviour
+#------------------------------------------------------------------------------
+
+
 def user_create(context, data_dict):
-    '''Override ckan's `user_create` action to allow payment plan to be set.
+    '''Override ckan's `user_create` action to allow a payment plan to be set.
 
     If there's a `payment_plan` field on the data_dict, then create the new
     User, adding them to that payment_plan.  This uses the
@@ -61,6 +81,11 @@ def user_create(context, data_dict):
 
     If there's no `payment_plan` field or if the payment_plan field value is
     None, then the action behaves no differently than ckan core's behaviour.
+
+    Required parameters, over and above CKAN core's user_create action:
+
+    :param payment_plan: Optional.  Name of the payment plan to add the user to
+    :type payment_plan: string
     '''
 
     session = context['session']

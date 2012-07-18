@@ -27,12 +27,26 @@ _validate = ckan.lib.navl.dictization_functions.validate
 
 ValidationError = logic.ValidationError
 
+#------------------------------------------------------------------------------
+# Actions specific to the datahub extension
+#------------------------------------------------------------------------------
+
 
 def datahub_user_set_payment_plan(context, data_dict):
     '''Set the User's payment plan.
 
+    You must have sufficient privelages to set a User's payment plan.
+
     A User can be removed from an existing PaymentPlan by setting their
     payment_plan to None.
+
+    :param user: The name of the user
+    :type user: string
+    :param payment_plan: The name of the payment plan, or the null value.
+    :type payment_plan: string or null value
+
+    :returns: Dict with the old and new payment plans, inc. signed-up users.
+    :rtype: dictionary
     '''
 
     _check_access('datahub_user_set_payment_plan', context, data_dict)
@@ -62,7 +76,7 @@ def datahub_user_set_payment_plan(context, data_dict):
                                     .format(payment_plan=payment_plan_name))
     elif payment_plan_name is None:
         payment_plan =  None
-
+    
     user.payment_plan = payment_plan
     model.repo.commit()
     _log.debug('User %s payment plan changed to %s',
@@ -77,12 +91,16 @@ def datahub_user_set_payment_plan(context, data_dict):
         'new_payment_plan': new_payment_plan,
     }
 
+#------------------------------------------------------------------------------
+# Actions that overide default CKAN behaviour
+#------------------------------------------------------------------------------
+
 
 def user_update(context, data_dict):
-    '''Override core user_update() action.
+    '''Override the core user_update() action.
 
     In addition to the normal update action, sysadmins can set the payment
-    plan of a User
+    plan of a User.
 
     If there's a `payment_plan` field on the data_dict, then create the new
     User, adding them to that payment_plan.  This uses the
@@ -93,7 +111,15 @@ def user_update(context, data_dict):
     than ckan core's behaviour.
 
     Note that we don't allow users to set their own payment plan **at all**.
-    We don't want users to inadvertantly set their payment plan to None!
+    Not even to downgrade or remove their payment plans: we don't want users to
+    inadvertantly set their payment plan to None!
+
+    Additional parameters:
+
+    :param payment_plan: Optional.  The name of the payment plan.
+    :type payment_plan: string or null value
+    
+    TODO: return type!
     '''
 
     session = context['session']

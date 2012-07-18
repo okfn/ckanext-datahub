@@ -28,12 +28,24 @@ Authorizer = ckan.authz.Authorizer
 ValidationError = logic.ValidationError
 NotFound = logic.NotFound
 
+#------------------------------------------------------------------------------
+# Actions specific to the datahub extension
+#------------------------------------------------------------------------------
+
 
 @logic.side_effect_free
 def datahub_payment_plan_show(context, data_dict):
     '''Show an existing PaymentPlan
 
-    Identified by name.
+    You must have sufficient privelages to view the available payment plans.
+
+    Parameters:
+
+    :param name: The name of the payment plan to view
+    :param type: string
+
+    :returns: a dict representation of the plan, including sign-up users.
+    :rtype: dictionary
     '''
 
     _check_access('datahub_payment_plan_show', context, data_dict)
@@ -50,9 +62,15 @@ def datahub_payment_plan_show(context, data_dict):
 
 @logic.side_effect_free
 def datahub_payment_plan_list(context, data_dict):
-    '''List existing PaymentPlans
+    '''List existing PaymentPlans, optinally filtered by name.
 
-    Optionally filtered by name.
+    You must have sufficient privelages to list existing payment plans.
+
+    :param names: name(s) of payment plans to view
+    :type names: string or list of strings
+
+    :returns: a list of dicts representing each plan, inc. signed-up users.
+    :rtype: [dictionary]
     '''
 
     _check_access('datahub_payment_plan_list', context, data_dict)
@@ -72,11 +90,34 @@ def datahub_payment_plan_list(context, data_dict):
     extended_context.update(include_users=True)
     return dh_dictization.payment_plan_list_dictize(q, extended_context)
 
+#------------------------------------------------------------------------------
+# Actions that overide default CKAN behaviour
+#------------------------------------------------------------------------------
+
+
 @logic.side_effect_free
 def user_show(context, data_dict):
     '''Return standard user account, augmented with payment plan.
 
     Payment plan is only visible to sysadmins and the owner of the account.
+
+    There are no parameters required above and beyond that required by CKAN
+    core, namely:
+    
+    Either the ``id`` or the ``user_obj`` parameter must be given.
+
+    :param id: the id or name of the user (optional)
+    :type id: string
+    :param user_obj: the user dictionary of the user (optional)
+    :type user_obj: user dictionary
+
+    :rtype: dictionary
+
+    The returned dictionary is the same, except for the case where the user
+    has sufficient permissions to view the payment plan.  In which case there's
+    an extra field on the returned dict.  The attached payment plan is `None`
+    if the user has no payment plan, otherwise it's a dict **without** the
+    list of signed-up members.
     '''
     model = context['model']
     user = context['user']
