@@ -380,12 +380,17 @@ class TestUserActions(object):
             'user': 'testsysadmin',
         }
 
-        logic.get_action('user_create')(
+        result = logic.get_action('user_create')(
             context,
             {'name': 'a-new-user',
              'password': 'a-password',
              'email': 'a-user@example.com'})
 
+        # Check returned value
+        assert_equal(result['name'], 'a-new-user')
+        assert_equal(result['payment_plan'], None)
+
+        # Check changes to the database.
         user = model.User.by_name('a-new-user')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -399,13 +404,18 @@ class TestUserActions(object):
             'user': 'testsysadmin',
         }
 
-        logic.get_action('user_create')(
+        result = logic.get_action('user_create')(
             context,
             {'name': 'a-new-user',
              'password': 'a-password',
              'email': 'a-user@example.com',
              'payment_plan': None})
 
+        # Check returned value
+        assert_equal(result['name'], 'a-new-user')
+        assert_equal(result['payment_plan'], None)
+
+        # Check DB too
         user = model.User.by_name('a-new-user')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -419,12 +429,17 @@ class TestUserActions(object):
             'user': 'tester',
         }
 
-        logic.get_action('user_create')(
+        result = logic.get_action('user_create')(
             context,
             {'name': 'a-new-user',
              'password': 'a-password',
              'email': 'a-user@example.com'})
 
+        # Check returned value
+        assert_equal(result['name'], 'a-new-user')
+        assert_not_in('payment_plan', result)
+
+        # Check DB for consistency
         user = model.User.by_name('a-new-user')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -446,13 +461,19 @@ class TestUserActions(object):
         assert_not_equal(payment_plan, None)
 
         # Now create a User, belonging to the new payment plan.
-        logic.get_action('user_create')(
+        result = logic.get_action('user_create')(
             context,
             {'name': 'a-new-user',
              'password': 'a-password',
              'email': 'a-user@example.com',
              'payment_plan': 'enterprise'})
 
+        # Check returned value
+        assert_equal(result['name'], 'a-new-user')
+        assert_in('payment_plan', result)
+        assert_equal(result['payment_plan']['name'], 'enterprise')
+
+        # Check DB too
         user = model.User.by_name('a-new-user')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, payment_plan)
@@ -527,12 +548,17 @@ class TestUserActions(object):
 
         anna_id = model.User.by_name('annafan').id
 
-        logic.get_action('user_update')(
+        result = logic.get_action('user_update')(
             context,
             {'name': 'annafan',
              'id': anna_id,
              'email': 'a-user@example.com'})
 
+        # Check returned value
+        assert_equal(result['name'], 'annafan')
+        assert_equal(result['payment_plan'], None)
+
+        # Check database too
         user = model.User.by_name('annafan')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -549,12 +575,17 @@ class TestUserActions(object):
 
         anna_id = model.User.by_name('annafan').id
 
-        logic.get_action('user_update')(
+        result = logic.get_action('user_update')(
             context,
             {'name': 'annafan',
              'id': anna_id,
              'email': 'a-user@example.com'})
 
+        # Check returned value
+        assert_equal(result['name'], 'annafan')
+        assert_equal(result['payment_plan'], None)
+
+        # Check DB for consistency
         user = model.User.by_name('annafan')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -571,13 +602,18 @@ class TestUserActions(object):
 
         user_id = model.User.by_name('russianfan').id
 
-        logic.get_action('user_update')(
+        result = logic.get_action('user_update')(
             context,
             {'name': 'russianfan',
              'id': user_id,
              'email': 'russian_fan@example.com',
              'payment_plan': None})
 
+        # Check returned value
+        assert_equal(result['name'], 'russianfan')
+        assert_equal(result['payment_plan'], None)
+
+        # Check DB for consistency
         user = model.User.by_name('russianfan')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, None)
@@ -594,7 +630,7 @@ class TestUserActions(object):
 
         anna_id = model.User.by_name('annafan').id
 
-        logic.get_action('user_update')(
+        result = logic.get_action('user_update')(
             context,
             {'name': 'annafan',
              'id': anna_id,
@@ -604,6 +640,14 @@ class TestUserActions(object):
         individual_plan = dh_models.PaymentPlan.by_name('individual')
         assert_not_equal(None, individual_plan)
 
+        # Check returned value
+        assert_equal(result['name'], 'annafan')
+        assert_equal(result['payment_plan']['name'], 'individual')
+        
+        # No need to return the payment plan's other users.
+        assert_not_in('users', result['payment_plan'])
+
+        # Check DB
         user = model.User.by_name('annafan')
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, individual_plan)
@@ -783,7 +827,7 @@ class TestUserActions(object):
         assert_equal(result['payment_plan']['name'], 'individual')
 
     def test_user_show_gives_owner_their_payment_plan(self):
-        '''A user can view their own payment plan.'''
+        '''A user can view their own payment plan.  But not its members.'''
         
         context = {
             'model': model,
@@ -797,6 +841,7 @@ class TestUserActions(object):
 
         assert_equal(result['name'], 'russianfan')
         assert_equal(result['payment_plan']['name'], 'individual')
+        assert_not_in('users', result['payment_plan'])
 
     def test_user_show_does_not_display_others_payment_plans(self):
         '''A user cannot view another user's payment plan.'''

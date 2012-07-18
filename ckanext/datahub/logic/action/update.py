@@ -152,3 +152,4 @@ def user_update(context, data_dict):
         except logic.NotAuthorized:
             session.rollback()
             raise
+    return _get_action('user_show')(context, {'id': user['name']})
