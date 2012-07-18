@@ -1,6 +1,10 @@
 import operator
 
-from nose.tools import assert_equal, assert_raises, assert_not_equal
+from nose.tools import (
+        assert_equal,
+        assert_raises,
+        assert_not_equal,
+        assert_not_in)
 
 import ckan.logic as logic
 import ckan.model as model
@@ -709,3 +713,67 @@ class TestUserActions(object):
         assert_not_equal(user, None)
         assert_equal(user.payment_plan, individual_plan)
         assert_not_equal(user.email, 'a-user@example.com')
+
+    def test_user_show_gives_sysadmins_a_users_payment_plan(self):
+        '''A sysadmin can view another user's payment plan.'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        result = logic.get_action('user_show')(
+            context,
+            {'id': 'russianfan'})
+
+        assert_equal(result['name'], 'russianfan')
+        assert_equal(result['payment_plan']['name'], 'individual')
+
+    def test_user_show_gives_owner_their_payment_plan(self):
+        '''A user can view their own payment plan.'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'russianfan',
+        }
+
+        result = logic.get_action('user_show')(
+            context,
+            {'id': 'russianfan'})
+
+        assert_equal(result['name'], 'russianfan')
+        assert_equal(result['payment_plan']['name'], 'individual')
+
+    def test_user_show_does_not_display_others_payment_plans(self):
+        '''A user cannot view another user's payment plan.'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'annafan',
+        }
+
+        result = logic.get_action('user_show')(
+            context,
+            {'id': 'russianfan'})
+
+        assert_equal(result['name'], 'russianfan')
+        assert_not_in('payment_plan', result)
+
+    def test_user_show_has_null_payment_plan_when_not_signed_up_to_one(self):
+        '''When showing a  user without a payment plan, it should be None'''
+        
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        result = logic.get_action('user_show')(
+            context,
+            {'id': 'annafan'})
+
+        assert_equal(result['name'], 'annafan')
+        assert_equal(result['payment_plan'], None)

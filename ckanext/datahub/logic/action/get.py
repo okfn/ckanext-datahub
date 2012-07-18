@@ -24,6 +24,7 @@ _get_action = logic.get_action
 _get_or_bust = logic.get_or_bust
 _validate = ckan.lib.navl.dictization_functions.validate
 
+Authorizer = ckan.authz.Authorizer
 ValidationError = logic.ValidationError
 NotFound = logic.NotFound
 
@@ -57,7 +58,7 @@ def datahub_payment_plan_list(context, data_dict):
     names = data_dict.get('names', [])
     if isinstance(names, basestring):
         names = [names]
-    
+
     q = session.query(dh_models.PaymentPlan).\
                 outerjoin(dh_models.PaymentPlan.users)
     if names:
@@ -65,3 +66,27 @@ def datahub_payment_plan_list(context, data_dict):
 
     extended_context = dict(include_users=True, **context)
     return dh_dictization.payment_plan_list_dictize(q, extended_context)
+
+def user_show(context, data_dict):
+    '''Return standard user account, augmented with payment plan.
+
+    Payment plan is only visible to sysadmins and the owner of the account.
+    '''
+    model = context['model']
+    user = context['user']
+
+    user_dict = logic.action.get.user_show(context, data_dict)
+    user_obj = model.User.get(user_dict['id'])
+
+    if Authorizer().is_sysadmin(unicode(user)) or user == user_obj.name:
+        # Only attach payment plan information if sysadmin, or the owner of
+        # the requested user.
+        if 'payment_plan' in user_dict:
+            raise Exception('Cannot attach payment_plan to user_dict as it '
+                            'would clobber an existing item.')
+
+        user_dict['payment_plan'] = dh_dictization.payment_plan_dictize(
+            user_obj.payment_plan,
+            context)
+
+    return user_dict
