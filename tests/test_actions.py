@@ -4,6 +4,7 @@ from nose.tools import (
         assert_equal,
         assert_raises,
         assert_not_equal,
+        assert_in,
         assert_not_in)
 
 import ckan.logic as logic
@@ -215,6 +216,44 @@ class TestPaymentPlanActions(object):
         # Check they are no longer a member of any payment plan.
         user = model.User.by_name('tester')
         assert_equal(user.payment_plan, None)
+
+    def test_show_payment_plan_lists_users(self):
+        '''Viewing a payment plan should list the users belonging to it.'''
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': model.User.by_name('testsysadmin'),
+        }
+
+        # Create a PaymentPlan first
+        logic.get_action('datahub_payment_plan_create')(
+            context,
+            {'name': 'enterprise'})
+
+        # Add some users to the PaymentPlan
+        add_action = logic.get_action('datahub_user_set_payment_plan')
+        def add_user_to_payment_plan(username):
+            data_dict = {
+                'payment_plan': 'enterprise',
+                'user': username,
+            }
+            add_action(context, data_dict)
+
+        add_user_to_payment_plan('tester')
+        add_user_to_payment_plan('joeadmin')
+        add_user_to_payment_plan('annafan')
+
+        # Run the action
+        data_dict = {'name': 'enterprise'}
+        result = logic.get_action('datahub_payment_plan_show')(
+            context,
+            data_dict)
+
+        # Assertions
+        assert_not_equal(result, None)
+        assert_in('users', result)
+        assert_equal(len(result['users']), 3)
 
     def test_list_payment_plan_lists_all_services(self):
         '''Lists all services and users which belong to them'''

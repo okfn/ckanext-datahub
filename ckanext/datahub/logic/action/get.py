@@ -44,7 +44,9 @@ def datahub_payment_plan_show(context, data_dict):
     if not payment_plan:
         raise NotFound
 
-    return dh_dictization.payment_plan_dictize(payment_plan, context)
+    extended_context = {'include_users': True}
+    extended_context.update(context)
+    return dh_dictization.payment_plan_dictize(payment_plan, extended_context)
 
 @logic.side_effect_free
 def datahub_payment_plan_list(context, data_dict):
