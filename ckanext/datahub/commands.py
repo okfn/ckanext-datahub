@@ -129,11 +129,14 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
             'user': user,
             'payment_plan': None}
 
-        logic.get_action('datahub_user_set_payment_plan')(
+        result = logic.get_action('datahub_user_set_payment_plan')(
             self.context,
             data_dict)
 
-        print '%s removed from payment plan.' % user
+        old_pp = result['old_payment_plan']
+        old_pp = old_pp['name'] if old_pp else 'none'
+
+        print '%s removed from %s.' % (user, old_pp)
 
 
     def set_payment_plan(self, user, plan):
@@ -142,11 +145,16 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
             'user': user,
             'payment_plan': plan}
 
-        logic.get_action('datahub_user_set_payment_plan')(
+        result = logic.get_action('datahub_user_set_payment_plan')(
             self.context,
             data_dict)
 
-        print '%s\'s payment plan set to %s' % (user, plan)
+        def pp_str(pp):
+            return pp['name'] if pp else 'none'
+        pp_from = pp_str(result['old_payment_plan'])
+        pp_to = pp_str(result['new_payment_plan'])
+
+        print '%s\'s payment plan set from % s to %s' % (user, pp_from, pp_to)
 
     def _print_items(self, titles, stringss):
         '''Prints a nested list of strings.
