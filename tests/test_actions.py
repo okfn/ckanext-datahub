@@ -289,6 +289,14 @@ class TestUserActions(object):
     def setUp(self):
         CreateTestData.create_basic_test_data()
 
+        individual_plan = dh_models.PaymentPlan(name='individual')
+        model.Session.add(individual_plan)
+
+        # Assign "russianfan" a payment plan
+        russian_fan = model.User.by_name('russianfan')
+        russian_fan.payment_plan = individual_plan
+        model.repo.commit_and_remove()
+
     def tearDown(self):
         CreateTestData.delete()
 
@@ -454,40 +462,250 @@ class TestUserActions(object):
 
     def test_user_update_without_payment_plan_as_sysadmin(self):
         '''Updating an existing user as sysadmin works as usual.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        logic.get_action('user_update')(
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'email': 'a-user@example.com'})
+
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_equal(user.email, 'a-user@example.com')
 
     def test_user_update_without_payment_plan_as_the_user(self):
         '''A user can update their own User as usual.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'annafan',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        logic.get_action('user_update')(
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'email': 'a-user@example.com'})
+
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_null_payment_plan_as_sysadmin(self):
         '''Removing a user's payment plan as sysadmin is allowed'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        user_id = model.User.by_name('russianfan').id
+
+        logic.get_action('user_update')(
+            context,
+            {'name': 'russianfan',
+             'id': user_id,
+             'email': 'russian_fan@example.com',
+             'payment_plan': None})
+
+        user = model.User.by_name('russianfan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_equal(user.email, 'russian_fan@example.com')
 
     def test_user_update_with_valid_payment_plan_as_sysadmin(self):
         '''Setting a user's payment plan as sysadmin is allowed.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        logic.get_action('user_update')(
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'payment_plan': 'individual',
+             'email': 'a-user@example.com'})
+
+        individual_plan = dh_models.PaymentPlan.by_name('individual')
+        assert_not_equal(None, individual_plan)
+
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, individual_plan)
+        assert_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_null_payment_plan_as_that_user(self):
         '''A user cannot remove their own payment plan'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'russianfan',
+        }
+
+        user_id = model.User.by_name('russianfan').id
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'russianfan',
+             'id': user_id,
+             'email': 'russian_fan@example.com',
+             'payment_plan': None})
+
+        # Double check the User object.
+        user = model.User.by_name('russianfan')
+        assert_not_equal(user, None)
+        assert_not_equal(user.payment_plan, None)
+        assert_not_equal(user.email, 'russian_fan@example.com')
 
     def test_user_update_with_valid_payment_plan_as_that_user(self):
         '''A user cannot set their own payment plan.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'annafan',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'payment_plan': 'individual',
+             'email': 'a-user@example.com'})
+
+        # Check the User model hasn't changed
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_not_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_no_payment_plan_as_other_user(self):
         '''A user cannot update another user.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'russianfan',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'email': 'a-user@example.com'})
+
+        # Check the User model hasn't changed
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_not_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_null_payment_plan_as_other_user(self):
         '''A user cannot remove another user's payment plan'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'annafan',
+        }
+
+        russian_id = model.User.by_name('russianfan').id
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'russianfan',
+             'id': russian_id,
+             'payment_plan': None,
+             'email': 'a-user@example.com'})
+
+        # Check the User model hasn't changed
+        user = model.User.by_name('russianfan')
+        assert_not_equal(user, None)
+        assert_not_equal(user.payment_plan, None)
+        assert_not_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_valid_payment_plan_as_other_user(self):
         '''A user cannot set the payment plan of another user.'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'russianfan',
+        }
+
+        anna_id = model.User.by_name('annafan').id
+
+        assert_raises(
+            logic.NotAuthorized,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'annafan',
+             'id': anna_id,
+             'payment_plan': 'individual',
+             'email': 'a-user@example.com'})
+
+        # Check the User model hasn't changed
+        user = model.User.by_name('annafan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, None)
+        assert_not_equal(user.email, 'a-user@example.com')
 
     def test_user_update_with_invalid_payment_plan_as_sysadmin(self):
         '''Cannot move a user to a non-existant payment plan'''
-        pass
+
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': 'testsysadmin',
+        }
+
+        russian_id = model.User.by_name('russianfan').id
+
+        assert_raises(
+            logic.ValidationError,
+            logic.get_action('user_update'),
+            context,
+            {'name': 'russianfan',
+             'id': russian_id,
+             'payment_plan': 'does-not-exist',
+             'email': 'a-user@example.com'})
+
+        individual_plan = dh_models.PaymentPlan.by_name('individual')
+        assert_not_equal(None, individual_plan)
+
+        user = model.User.by_name('russianfan')
+        assert_not_equal(user, None)
+        assert_equal(user.payment_plan, individual_plan)
+        assert_not_equal(user.email, 'a-user@example.com')
