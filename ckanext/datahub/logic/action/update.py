@@ -117,9 +117,10 @@ def user_update(context, data_dict):
     Additional parameters:
 
     :param payment_plan: Optional.  The name of the payment plan.
-    :type payment_plan: string or null value
-    
-    TODO: return type!
+    :type payment_plan: string or null value#
+
+    :returns: Dict representing the update user.
+    :rtype: dictionary
     '''
 
     session = context['session']
