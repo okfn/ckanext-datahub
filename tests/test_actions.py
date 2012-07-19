@@ -1,11 +1,11 @@
 import operator
 
 from nose.tools import (
-        assert_equal,
-        assert_raises,
-        assert_not_equal,
-        assert_in,
-        assert_not_in)
+    assert_equal,
+    assert_raises,
+    assert_not_equal,
+    assert_in,
+    assert_not_in)
 
 import ckan.logic as logic
 import ckan.model as model
@@ -51,11 +51,12 @@ class TestPaymentPlanActions(object):
         }
 
         data_dict = {'name': 'enterprise-level'}
-        result = logic.get_action('datahub_payment_plan_create')(context, data_dict)
+        result = logic.get_action('datahub_payment_plan_create')(context,
+                                                                 data_dict)
         assert_equal('enterprise-level', result['name'])
 
     def test_create_new_payment_plan_as_normal_user(self):
-        '''"Normal" logged-in users should not be able to create PaymentPlans'''
+        '''Non-sysadmin users should not be able to create PaymentPlans'''
 
         context = {
             'model': model,
@@ -95,7 +96,8 @@ class TestPaymentPlanActions(object):
         }
 
         data_dict = {'name': 'enterprise-level'}
-        result = logic.get_action('datahub_payment_plan_create')(context, data_dict)
+        result = logic.get_action('datahub_payment_plan_create')(context,
+                                                                 data_dict)
         assert_equal('enterprise-level', result['name'])
 
         ## Now, try to create a new PaymentPlan of the same name.
@@ -246,6 +248,7 @@ class TestPaymentPlanActions(object):
 
         # Add some users to the PaymentPlan
         add_action = logic.get_action('datahub_user_set_payment_plan')
+
         def add_user_to_payment_plan(username):
             data_dict = {
                 'payment_plan': 'enterprise',
@@ -285,6 +288,7 @@ class TestPaymentPlanActions(object):
 
         # Add some users to the PaymentPlans
         add_action = logic.get_action('datahub_user_set_payment_plan')
+
         def add_user_to(payment_plan_name, username):
             data_dict = {
                 'payment_plan': payment_plan_name,
@@ -303,10 +307,11 @@ class TestPaymentPlanActions(object):
             data_dict)
 
         # Assertions
-        assert_equal(len(result), 3) # 3 payment plans.
+        assert_equal(len(result), 3)  # 3 payment plans.
 
-        enterprise, individual, small_business = [ ps for ps in \
-                sorted(result, key=operator.itemgetter('name')) ]
+        enterprise, individual, small_business = [
+            ps for ps in sorted(result, key=operator.itemgetter('name'))
+        ]
 
         assert_equal(len(enterprise['users']), 2)
         assert_equal(len(individual['users']), 1)
@@ -333,7 +338,8 @@ class TestPaymentPlanActions(object):
             context,
             data_dict)
 
-        assert_equal(len(result), 2) # 2 payment plans.
+        assert_equal(len(result), 2)  # 2 payment plans.
+
 
 class TestUserActions(object):
     '''Tests for the override user_create and user_update actions.'''

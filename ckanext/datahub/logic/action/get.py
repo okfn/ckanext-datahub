@@ -56,9 +56,10 @@ def datahub_payment_plan_show(context, data_dict):
     if not payment_plan:
         raise NotFound
 
-    extended_context = context.copy() # Don't modify caller's copy
+    extended_context = context.copy()  # Don't modify caller's copy
     extended_context.update(include_users=True)
     return dh_dictization.payment_plan_dictize(payment_plan, extended_context)
+
 
 @logic.side_effect_free
 def datahub_payment_plan_list(context, data_dict):
@@ -81,12 +82,12 @@ def datahub_payment_plan_list(context, data_dict):
     if isinstance(names, basestring):
         names = [names]
 
-    q = session.query(dh_models.PaymentPlan).\
-                outerjoin(dh_models.PaymentPlan.users)
+    q = session.query(dh_models.PaymentPlan)\
+               .outerjoin(dh_models.PaymentPlan.users)
     if names:
         q = q.filter(dh_models.PaymentPlan.name.in_(names))
 
-    extended_context = context.copy() # Don't modify caller's copy
+    extended_context = context.copy()  # Don't modify caller's copy
     extended_context.update(include_users=True)
     return dh_dictization.payment_plan_list_dictize(q, extended_context)
 
@@ -141,9 +142,9 @@ def user_show(context, data_dict):
         if (context.get('include_users', False) and
                 not Authorizer().is_sysadmin(unicode(user))):
             _log.warning('Context altered in attempt to view members of a '
-                        'payment plan, without user having sufficient '
-                        'privelages to do so.')
-            context = context.copy() # Don't modify caller's context.
+                         'payment plan, without user having sufficient '
+                         'privelages to do so.')
+            context = context.copy()  # Don't modify caller's context.
             context.update(include_users=False)
 
         # Attach payment plan to the user_dict

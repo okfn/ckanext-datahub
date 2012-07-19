@@ -73,9 +73,9 @@ def datahub_user_set_payment_plan(context, data_dict):
         if not payment_plan:
             session.rollback()
             raise ValidationError(_('Unknown payment plan {payment_plan}')
-                                    .format(payment_plan=payment_plan_name))
+                                  .format(payment_plan=payment_plan_name))
     elif payment_plan_name is None:
-        payment_plan =  None
+        payment_plan = None
 
     user.payment_plan = payment_plan
 
@@ -151,7 +151,7 @@ def user_update(context, data_dict):
             _get_action('datahub_user_set_payment_plan')(
                 context,
                 {'user': user['name'],
-                'payment_plan': payment_plan})
+                 'payment_plan': payment_plan})
 
         except logic.NotAuthorized:
             session.rollback()

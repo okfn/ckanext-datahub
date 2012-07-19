@@ -6,7 +6,8 @@ import ckan.lib.dictization.model_dictize as model_dictize
 
 
 def payment_plan_list_dictize(payment_plans, context):
-    return [ payment_plan_dictize(p, context) for p in payment_plans ]
+    return [payment_plan_dictize(p, context) for p in payment_plans]
+
 
 def payment_plan_dictize(payment_plan, context):
 

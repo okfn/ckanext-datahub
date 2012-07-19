@@ -7,6 +7,7 @@ import ckan.logic.validators as validators
 
 import ckanext.datahub.validators as dh_validators
 
+
 def default_payment_plan_schema():
     return {
         'name': [navl_validators.not_empty,

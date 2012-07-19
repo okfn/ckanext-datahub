@@ -114,7 +114,7 @@ def user_create(context, data_dict):
             _get_action('datahub_user_set_payment_plan')(
                 context,
                 {'user': user['name'],
-                'payment_plan': payment_plan})
+                 'payment_plan': payment_plan})
 
         except logic.NotAuthorized:
             session.rollback()

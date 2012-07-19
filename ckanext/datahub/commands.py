@@ -1,10 +1,13 @@
+import fcntl
 from itertools import izip_longest
 import logging
 import math
 import os
 import pprint
 import string
+import struct
 import sys
+import termios
 
 import ckan.lib.cli
 import ckan.logic as logic
@@ -117,9 +120,9 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
             print '\t' + cmd_to_run
             sys.exit(0)
 
-        titles = [ plan['name'] for plan in plans ]
-        stringss = [ sorted([ user['name'] for user in plan['users'] ])
-                        for plan in plans ]
+        titles = [plan['name'] for plan in plans]
+        stringss = [sorted([user['name'] for user in plan['users']])
+                    for plan in plans]
 
         self._print_items(titles, stringss)
 
@@ -137,7 +140,6 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         old_pp = old_pp['name'] if old_pp else 'none'
 
         print '%s removed from %s.' % (user, old_pp)
-
 
     def set_payment_plan(self, user, plan):
         '''Add given user to plan'''
@@ -168,9 +170,9 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
 
             # Figure out the required column width to fit every string within
             # including a gap between columns.
-            column_width = max([9] + # minimum of 10 chars wide
-                           [ len(s) for strings in stringss for s in strings ])
-            column_width += 1 # gap between columns
+            column_width = max([9] +  # minimum of 10 chars wide
+                               [len(s) for ss in stringss for s in ss])
+            column_width += 1  # gap between columns
 
             for title, strings in zip(titles, stringss):
                 print '-' * window_width
@@ -195,12 +197,11 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         Returns None if not able to determine the width
         '''
         try:
-            import termios, struct, fcntl
             height, width = struct.unpack(
-                'hh', # unpack 2 short integers ...
+                'hh',  # unpack 2 short integers ...
                 fcntl.ioctl(sys.stdout.fileno(),
                             termios.TIOCGWINSZ,
-                            '....')) # ... into 4 bytes
+                            '....'))  # ... into 4 bytes
             return width
         except:
             return None
@@ -214,15 +215,15 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
         num_cols = max(1, window_width / column_width)
         num_rows = int(math.ceil(float(len(ss)) / num_cols))
 
-        columns = [ ss[i:i + num_rows] for i in range(0, len(ss), num_rows) ]
+        columns = [ss[i:i + num_rows] for i in range(0, len(ss), num_rows)]
         rows = izip_longest(*columns, fillvalue='')
 
         def expand_cell(cell):
             '''Expand a string to fill the column width'''
             return string.ljust(cell, column_width)
 
-        rows = [ map(expand_cell, row) for row in rows ]
-        row_strings = [ ''.join(row) for row in rows ]
+        rows = [map(expand_cell, row) for row in rows]
+        row_strings = [''.join(row) for row in rows]
         print '\n'.join(row_strings)
 
     def _error(self, msg):

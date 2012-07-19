@@ -21,4 +21,3 @@ def datahub_user_set_payment_plan(context, data_dict):
         }
     else:
         return {'success': True}
-
