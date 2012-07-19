@@ -103,7 +103,7 @@ def user_show(context, data_dict):
 
     There are no parameters required above and beyond that required by CKAN
     core, namely:
-    
+
     Either the ``id`` or the ``user_obj`` parameter must be given.
 
     :param id: the id or name of the user (optional)

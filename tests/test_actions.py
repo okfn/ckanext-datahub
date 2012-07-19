@@ -56,7 +56,7 @@ class TestPaymentPlanActions(object):
 
     def test_create_new_payment_plan_as_normal_user(self):
         '''"Normal" logged-in users should not be able to create PaymentPlans'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -72,7 +72,7 @@ class TestPaymentPlanActions(object):
 
     def test_create_new_payment_plan_as_anonymous_user(self):
         '''Anonymous users should not be able to create PaymentPlans'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -147,11 +147,11 @@ class TestPaymentPlanActions(object):
         assert_equal(old_payment_plan, None)
 
         assert_equal(new_payment_plan['name'], 'enterprise')
-        assert_equal(new_payment_plan['users'][0]['name'], 'tester') 
+        assert_equal(new_payment_plan['users'][0]['name'], 'tester')
 
     def test_add_non_existant_user_to_existing_payment_plan(self):
         '''Should fail if the user does not exist'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -189,7 +189,7 @@ class TestPaymentPlanActions(object):
 
     def test_remove_user_from_payment_plan(self):
         '''Remove a User from their payment plan.'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -211,14 +211,14 @@ class TestPaymentPlanActions(object):
         assert_in('new_payment_plan', result)
         new_payment_plan = result['new_payment_plan']
         assert_equal(new_payment_plan['name'], 'enterprise')
-        assert_equal(new_payment_plan['users'][0]['name'], 'tester') 
+        assert_equal(new_payment_plan['users'][0]['name'], 'tester')
 
         # And now remove them from it.
         result = logic.get_action('datahub_user_set_payment_plan')(
             context,
             {'payment_plan': None,
              'user': 'tester'})
-        
+
         assert_in('old_payment_plan', result)
         assert_in('new_payment_plan', result)
         new_payment_plan = result['new_payment_plan']
@@ -304,14 +304,14 @@ class TestPaymentPlanActions(object):
 
         # Assertions
         assert_equal(len(result), 3) # 3 payment plans.
-        
+
         enterprise, individual, small_business = [ ps for ps in \
                 sorted(result, key=operator.itemgetter('name')) ]
 
         assert_equal(len(enterprise['users']), 2)
         assert_equal(len(individual['users']), 1)
         assert_equal(len(small_business['users']), 0)
-    
+
     def test_list_payment_plan_lists_selected_services(self):
         '''Lists selected services and users which belong to them'''
 
@@ -643,7 +643,7 @@ class TestUserActions(object):
         # Check returned value
         assert_equal(result['name'], 'annafan')
         assert_equal(result['payment_plan']['name'], 'individual')
-        
+
         # No need to return the payment plan's other users.
         assert_not_in('users', result['payment_plan'])
 
@@ -812,7 +812,7 @@ class TestUserActions(object):
 
     def test_user_show_gives_sysadmins_a_users_payment_plan(self):
         '''A sysadmin can view another user's payment plan.'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -828,7 +828,7 @@ class TestUserActions(object):
 
     def test_user_show_gives_owner_their_payment_plan(self):
         '''A user can view their own payment plan.  But not its members.'''
-        
+
         context = {
             'model': model,
             'session': model.Session,
@@ -861,7 +861,7 @@ class TestUserActions(object):
 
     def test_user_show_has_null_payment_plan_when_not_signed_up_to_one(self):
         '''When showing a  user without a payment plan, it should be None'''
-        
+
         context = {
             'model': model,
             'session': model.Session,

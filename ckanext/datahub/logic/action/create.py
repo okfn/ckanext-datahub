@@ -33,7 +33,7 @@ ValidationError = logic.ValidationError
 
 def datahub_payment_plan_create(context, data_dict):
     '''Creates a new PaymentPlan
-    
+
     You must be authorized to create new payment plans.
 
     Required arguments:
@@ -105,7 +105,7 @@ def user_create(context, data_dict):
         # Note: The try-block is necessary as we've created the User
         # un-conditionally, and need to roll it back if the set_payment_plan
         # fails due to not being authorized.
-        # 
+        #
         # This is true even if we explicitely run
         # `_check_access('datahub_user_set_payment_plan')` beforehand, as there
         # may be other checks in the `set_payment_plan` action that we're not

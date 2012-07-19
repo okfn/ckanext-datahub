@@ -34,7 +34,7 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
     Where:
 
       <user>          = a user name
-      <payment-plan>  = a payment plan name 
+      <payment-plan>  = a payment plan name
       <config>        = path to ckan config (.ini) file
 
     '''
@@ -103,7 +103,7 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
 
     def list_paying_users(self, *plans):
         '''List paying users of the given plans'''
-        
+
         data_dict = {'names': plans}
         plans = logic.get_action('datahub_payment_plan_list')(
             self.context,
@@ -204,16 +204,16 @@ class DatahubCommand(ckan.lib.cli.CkanCommand):
             return width
         except:
             return None
-        
+
     def _print_in_columns(self, window_width, column_width, ss):
         '''Print list of strings in columns'''
-        
+
         if len(ss) is 0:
             return
 
         num_cols = max(1, window_width / column_width)
         num_rows = int(math.ceil(float(len(ss)) / num_cols))
-        
+
         columns = [ ss[i:i + num_rows] for i in range(0, len(ss), num_rows) ]
         rows = izip_longest(*columns, fillvalue='')
 
