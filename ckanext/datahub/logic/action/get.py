@@ -132,6 +132,21 @@ def user_show(context, data_dict):
             raise Exception('Cannot attach payment_plan to user_dict as it '
                             'would clobber an existing item.')
 
+        # It's possible that the caller might set the context to include users
+        # belonging to the payment plan.  This is only okay if the user making
+        # the request is a sysadmin.  Otherwise, we log the error, and remove
+        # the flag from the context.  An Authorization error is not raised as
+        # the context isn't controlled by the user making the request - ie,
+        # it's a bug in the code.
+        if (context.get('include_users', False) and
+                not Authorizer().is_sysadmin(unicode(user))):
+            _log.warning('Context altered in attempt to view members of a '
+                        'payment plan, without user having sufficient '
+                        'privelages to do so.')
+            context = context.copy() # Don't modify caller's context.
+            context.update(include_users=False)
+
+        # Attach payment plan to the user_dict
         user_dict['payment_plan'] = dh_dictization.payment_plan_dictize(
             user_obj.payment_plan,
             context)
