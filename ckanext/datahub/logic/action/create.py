@@ -62,7 +62,9 @@ def datahub_payment_plan_create(context, data_dict):
     service = dh_models.PaymentPlan(name=name)
     session.add(service)
 
-    model.repo.commit()
+    if not context.get('defer_commit'):
+        model.repo.commit()
+
     _log.debug('Created new PaymentPlan: %s', name)
     return _get_action('datahub_payment_plan_show')(context, {'name': name})
 

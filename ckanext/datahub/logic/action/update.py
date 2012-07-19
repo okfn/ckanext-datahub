@@ -78,7 +78,10 @@ def datahub_user_set_payment_plan(context, data_dict):
         payment_plan =  None
     
     user.payment_plan = payment_plan
-    model.repo.commit()
+    
+    if not context.get('defer_commit'):
+        model.repo.commit()
+
     _log.debug('User %s payment plan changed to %s',
                username, payment_plan_name)
 
