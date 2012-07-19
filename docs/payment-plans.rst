@@ -99,3 +99,13 @@ authorization function.  They have been set up so that:
 - Only sysadmins can remove users from payment plans.
 - A user can view the payment plan they belong to (if any), but they cannot
   view the other members of that plan.
+
+Paster Commands
+---------------
+
+Management of payment plans is also available through some paster commands.  In short, paster commands are available to create new payment plans; add and remove users to existing payment plans; and listing users by payment plan.  Please run: ::
+
+  paster datahub -c ../ckan/development.ini --help
+
+for more details.
+
