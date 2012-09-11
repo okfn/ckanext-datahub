@@ -121,9 +121,9 @@
     <h3>Cite this</h3>
     <div id="dataset-information">
         <p>
-        ${c.pkg.title}. ${c.pkg.author or "No author"}.<br/>
-        Retrieved ${h.render_datetime(now,date_format='%H:%M, %b %d, %Y (UTC)',with_hours=True)}.<br/>
-        <a href="${g.site_url}${h.url_for(controller='package', action='read', id=c.pkg_dict['name'])}">${g.site_title}</a>
+            ${c.pkg.title}. ${c.pkg.author or "No author"}.<br/>
+            Retrieved ${h.render_datetime(now,date_format='%H:%M, %b %d, %Y (UTC)',with_hours=True)}.<br/>
+            <a href="${g.site_url}${h.url_for(controller='package', action='read', id=c.pkg_dict['name'])}">${g.site_title}</a></br/>
         </p>
     </div>
   </div> <!-- /dataset -->
