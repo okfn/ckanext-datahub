@@ -1,0 +1,16 @@
+{% ckan_extends %}
+
+{% block home_image_caption -%}
+ {{ _("Featured dataset: Malawi Aid Projects") }}
+{%- endblock %}
+
+{% block home_image_content %}
+<a class="image" href="{% url_for controller='package', action='read', id='malawi-aid-projects' %}">
+  <img src="{% url_for_static('/images/home_image.jpg') %}" width="420" height="317" />
+</a>
+{% endblock %}
+
+{% block footer_attribution %}
+  {{ super() }}
+  <p><small>{{ _('Maps powered by Leaflet, map data &copy; OpenStreetMap contributors, CC-BY-SA, map imagery &copy; CloudMade') }}</small></p>
+{% endblock %}

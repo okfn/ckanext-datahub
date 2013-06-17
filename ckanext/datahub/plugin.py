@@ -9,4 +9,5 @@ class DataHub(p.SingletonPlugin):
     p.implements(p.IConfigurer)
 
     def update_config(self, config):
+        p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
