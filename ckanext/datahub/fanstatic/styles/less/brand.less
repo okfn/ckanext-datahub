@@ -1,0 +1,389 @@
+a,
+.btn-link {
+  color: darken(@primary, 10%);
+}
+a:hover,
+a:focus,
+.btn-link:hover,
+.btn-link:focus {
+  color: darken(@primary, 20%);
+}
+
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  background-color: darken(@primary, 20%);
+  background-image: -moz-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(darken(@primary, 10%)), to(darken(@primary, 20%)));
+  background-image: -webkit-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: -o-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: linear-gradient(to bottom, darken(@primary, 10%), darken(@primary, 20%));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff187794', endColorstr='#ff14657e', GradientType=0);
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  background-color: darken(@primary, 20%);
+  background-image: -moz-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(darken(@primary, 10%)), to(darken(@primary, 20%)));
+  background-image: -webkit-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: -o-linear-gradient(top, darken(@primary, 10%), darken(@primary, 20%));
+  background-image: linear-gradient(to bottom, darken(@primary, 10%), darken(@primary, 20%));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff187794', endColorstr='#ff14657e', GradientType=0);
+}
+
+.nav-list > .active > a,
+.nav-list > .active > a:hover,
+.nav-list > .active > a:focus {
+  background-color: darken(@primary, 10%);
+}
+
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover,
+.nav-pills > .active > a:focus {
+  background-color: darken(@primary, 10%);
+}
+
+.nav .dropdown-toggle .caret {
+  border-top-color: darken(@primary, 10%);
+  border-bottom-color: darken(@primary, 10%);
+}
+.nav .dropdown-toggle:hover .caret,
+.nav .dropdown-toggle:focus .caret {
+  border-top-color: darken(@primary, 30%);
+  border-bottom-color: darken(@primary, 30%);
+}
+
+a.thumbnail:hover,
+a.thumbnail:focus {
+  border-color: darken(@primary, 10%);
+  -webkit-box-shadow: 0 1px 4px fade(@primary, 25%);
+  -moz-box-shadow: 0 1px 4px fade(@primary, 25%);
+  box-shadow: 0 1px 4px fade(@primary, 25%);
+}
+
+.editor .editor-info-block a {
+  color: darken(@primary, 10%);
+}
+
+.popover-followee .nav li a i {
+  background-color: darken(@primary, 10%);
+  -webkit-box-shadow: inset 0 1px 2 x fade(@primary, 20%);
+  -moz-box-shadow: inset 0 1px 2 x fade(@primary, 20%);
+  box-shadow: inset 0 1px 2 x fade(@primary, 20%);
+}
+
+.popover-followee .nav li.active a i {
+  color: darken(@primary, 10%);
+}
+
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: @primary;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fadeout(@primary, 60%);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fadeout(@primary, 60%);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fadeout(@primary, 60%);
+}
+
+
+/* Buttons */
+.btn-primary {
+  background-color: @primary;
+  background-image: -moz-linear-gradient(top, @primary, softlight(@primary, #000));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@primary), to(softlight(@primary, #000)));
+  background-image: -webkit-linear-gradient(top, @primary, softlight(@primary, #000));
+  background-image: -o-linear-gradient(top, @primary, softlight(@primary, #000));
+  background-image: linear-gradient(to bottom, @primary, softlight(@primary, #000));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@primary', endColorstr='softlight(@primary, #000)', GradientType=0);
+  border-color: softlight(@primary, #000);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  background-color: softlight(@primary, #000);
+}
+
+.btn-info {
+  background-color: @secondary;
+  background-image: -moz-linear-gradient(top, @secondary, softlight(@secondary, #000));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@secondary), to(softlight(@secondary, #000)));
+  background-image: -webkit-linear-gradient(top, @secondary, softlight(@secondary, #000));
+  background-image: -o-linear-gradient(top, @secondary, softlight(@secondary, #000));
+  background-image: linear-gradient(to bottom, @secondary, softlight(@secondary, #000));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@secondary', endColorstr='softlight(@secondary, #000)', GradientType=0);
+  border-color: softlight(@secondary, #000);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.btn-info.disabled,
+.btn-info[disabled] {
+  background-color: softlight(@secondary, #000);
+}
+
+.btn-success {
+  background-color: @success;
+  background-image: -moz-linear-gradient(top, @success, softlight(@success, #000));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@success), to(softlight(@success, #000)));
+  background-image: -webkit-linear-gradient(top, @success, softlight(@success, #000));
+  background-image: -o-linear-gradient(top, @success, softlight(@success, #000));
+  background-image: linear-gradient(to bottom, @success, softlight(@success, #000));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@success', endColorstr='softlight(@success, #000)', GradientType=0);
+  border-color: softlight(@success, #000);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: softlight(@success, #000);
+}
+
+.btn-warning {
+  background-color: @warning;
+  background-image: -moz-linear-gradient(top, @warning, softlight(@warning, #000));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from @warning, to softlight(@warning, #000));
+  background-image: -webkit-linear-gradient(top, @warning, softlight(@warning, #000));
+  background-image: -o-linear-gradient(top, @warning, softlight(@warning, #000));
+  background-image: linear-gradient(to bottom, @warning, softlight(@warning, #000));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@warning', endColorstr='softlight(@warning, #000)', GradientType=0);
+  border-color: softlight(@warning, #000);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning.active,
+.btn-warning.disabled,
+.btn-warning[disabled] {
+  background-color: softlight(@warning, #000);
+}
+
+.btn-danger {
+  background-color: @danger;
+  background-image: -moz-linear-gradient(top, @danger, softlight(@danger, #000));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@danger), to(softlight(@danger, #000)));
+  background-image: -webkit-linear-gradient(top, @danger, softlight(@danger, #000));
+  background-image: -o-linear-gradient(top, @danger, softlight(@danger, #000));
+  background-image: linear-gradient(to bottom, @danger, softlight(@danger, #000));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@danger', endColorstr='softlight(@danger, #000)', GradientType=0);
+  border-color: softlight(@danger, #000);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active,
+.btn-danger.disabled,
+.btn-danger[disabled] {
+  background-color: softlight(@danger, #000);
+}
+
+
+/* Header */
+.account-masthead {
+  background-color:@secondary;
+	background-image:none;
+}
+
+.account-masthead .account ul li {
+	border-left-color: darken(@secondary, 30%);
+}
+
+.account-masthead .account .notifications a span {
+  background-color: darken(@secondary, 30%);
+}
+
+.account-masthead .account ul li a {
+  color: fade(@secondary-fore, 60%);
+}
+.account-masthead .account ul li a:hover {
+	color: fade(@secondary-fore, 70%);
+  background-color: darken(@secondary, 30%);
+}
+
+.masthead {
+	background-color:@primary;
+	background-image:none;
+}
+
+.masthead .navigation .nav-pills li a:hover {
+  background-color: darken(@primary, 5%);
+	color:@primary-fore;
+}
+.masthead .navigation .nav-pills li.active a {
+  background-color: lighten(@primary, 5%);
+}
+
+.masthead input[type="text"] {
+  border-color: darken(@primary, 10%);
+}
+.masthead input[type="text"]:focus {
+	-webkit-box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
+}
+.masthead .site-search input {
+  padding: 5px 10px;
+}
+
+
+/* Main */
+[role=main],
+.main {
+	background-image:none;
+	background-color:#f0f0f0;
+}
+
+.box {
+	box-shadow: none;
+	-moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+
+.pill {
+  background-color: @secondary;
+}
+.pill a:hover {
+	color:#FFF;
+}
+
+
+.nav-item.active > a,
+.nav-item.active > a:hover {
+  background-color: @secondary;
+}
+.nav-item.active > a:before {
+	border-left-color:@secondary;
+}
+
+
+/* Footer */
+.site-footer,
+body {
+  background-color:@secondary;
+	background-image:none;
+}
+
+.site-footer .navigation .nav-pills li a:hover,
+.site-footer .navigation .nav-pills li.active a {
+  background-color: @secondary;
+}
+
+.site-footer input[type="text"] {
+  border-color: darken(@secondary, 10%);
+}
+
+.site-footer,
+.site-footer label,
+.site-footer small {
+  color: fade(@secondary-fore, 60%);
+}
+.site-footer a {
+  color: fade(@secondary-fore, 60%);
+}
+
+.attribution small {
+  color: fade(@secondary-fore, 60%);
+}
+
+
+/* Banner */
+.hero {
+	background-color: #FFFFFF;
+}
+.hero-secondary {
+	background-color:@primary;
+	color:@primary-fore;
+}
+.hero .search-giant input {
+	border-color:@warning;
+}
+.hero .search-giant input:focus {
+  border-color: softlight(@warning, #000);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+	background-color: lighten(@warning, 37%);
+}
+.hero .search-giant button {
+	background-image: url(../images/icon-search-27x26.png);
+}
+
+
+/* Tags */
+.main.homepage .tags {
+  background-color: @primary-fore;
+}
+.main.homepage .tags ul a.tag,
+.tags ul.tag-list a.tag {
+	background:#FFF;
+	color:@primary;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.main.homepage .tags ul a.tag {
+	background-color:#EEEEEE;
+}
+.main.homepage .tags ul a.tag:before,
+.tags ul.tag-list a.tag:before {
+	border-color: rgb(255,255,255); /* Fallback for IE8 */
+	border-color: rgba(255,255,255,0);
+	border-left-color:rgba(255,255,255,1);
+}
+.main.homepage .tags ul a.tag:before {
+	border-left-color:#EEEEEE;
+}
+.main.homepage .tags ul a.tag:after {
+	background-color:@primary-fore;
+}
+.tags ul.tag-list a.tag:after {
+	background-color:#F5F5F5; /* well colour */
+}	
+.main.homepage .tags ul a.tag:hover,
+.tags ul.tag-list a.tag:hover {
+	background:@primary;
+	color:@primary-fore;
+}	
+.main.homepage .tags ul a.tag:hover:before,
+.tags ul.tag-list a.tag:hover:before {
+	border-color: @primary; /* Fallback for IE8 */
+	border-color: fade(@primary, 0%);
+	border-left-color:fade(@primary, 100%);
+}
+
+.main.homepage .tags ul li:before,
+.tags ul.tag-list li:before {
+	border-color:rgb(255,255,255); /* Fallback for IE8 */
+	border-color:rgba(0, 0, 0, 0);
+	border-left-color:rgba(0, 0, 0, 0.1); /* shadow colour */
+}	

@@ -11,3 +11,6 @@ class DataHub(p.SingletonPlugin):
     def update_config(self, config):
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
+
+        # Add this plugin's fanstatic dir.
+        p.toolkit.add_resource('fanstatic', 'ckanext-datahub')

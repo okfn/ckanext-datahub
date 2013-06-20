@@ -1,16 +1,68 @@
 {% ckan_extends %}
 
-{% block home_image_caption -%}
- {{ _("Featured dataset: Malawi Aid Projects") }}
-{%- endblock %}
+{% block primary_content %}
+  {% block home_primary %}
+    <div class="hero-primary">
+      <div class="row">
+        <div class="span6 home-primary-text">
+          {% if g.site_intro_text %}
+            {{ h.render_markdown(g.site_intro_text) }}
+          {% else %}
+            {% block home_primary_content %}
+              <h1 class="page-heading">{% block home_primary_heading %}{{ _("Give your data a home") }}{% endblock %}</h1>
+              <p>
+              {% block home_primary_text %}
+                {% trans %}Register published datasets, create and manage groups of datasets.
+                {% endtrans %}
+              {% endblock %}
+              </p>
+              <a href="user/login" class="btn btn-warning btn-large">Register data for free</a>
+            {% endblock %}
+          {% endif %}
+        </div>
+        <div class="span6 home-search">
+          {% block home_search %}
+            <form class="dataset-search clearfix" method="get" action="{% url_for controller='package', action='search' %}">
+              <h3 class="heading">{{ _("Search Your Data") }}</h3>
+              <p>Search for data, and get updates from datasets and groups you're interested in.</p>
+              <span class="control-group search-giant">
+                <input type="text" class="search" name="q" value="{{ c.q }}" autocomplete="off" placeholder="{{ _('Search') }}" />
+                <button type="submit" value="{{ _('Search') }}">Submit</button>
+              </span>
+            </form>
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  {% endblock %}
 
-{% block home_image_content %}
-<a class="image" href="{% url_for controller='package', action='read', id='malawi-aid-projects' %}">
-  <img src="{% url_for_static('/images/home_image.jpg') %}" width="420" height="317" />
-</a>
+  <div class="hero-secondary">
+    {% block home_secondary_content %}
+       the free, powerful data management platform from the Open Knowledge Foundation
+    {% endblock %}
+  </div>
 {% endblock %}
 
-{% block footer_attribution %}
-  {{ super() }}
-  <p><small>{{ _('Maps powered by Leaflet, map data &copy; OpenStreetMap contributors, CC-BY-SA, map imagery &copy; CloudMade') }}</small></p>
+{% block secondary_content %}
+  {% block home_tags %}
+    <div class="tags box clearfix">
+      <h3>{{ _('Popular Tags') }}</h3>
+      {% set tags = h.get_facet_items_dict('tags', limit=8) %}
+      <ul>
+      {% for tag in tags %}
+        <li><a class="tag" href="{% url_for controller='package', action='search', tags=tag.name %}">{{ h.truncate(tag.display_name, 22) }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endblock %}
+  <div class="row group-listing">
+    {% for group in c.group_package_stuff %}
+      <div class="span6">
+        <div class="box">
+          {% snippet 'snippets/group_item.html', group=group.group_dict, truncate=100 %}
+          <div class="featured ribbon"><em>Featured</em></div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
