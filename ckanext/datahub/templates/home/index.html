@@ -23,7 +23,7 @@
         <div class="span6 home-search">
           {% block home_search %}
             <form class="dataset-search clearfix" method="get" action="{% url_for controller='package', action='search' %}">
-              <h3 class="heading">{{ _("Search Your Data") }}</h3>
+              <h3 class="heading">{{ _("Search your data") }}</h3>
               <p>Search for data, and get updates from datasets and groups you're interested in.</p>
               <span class="control-group search-giant">
                 <input type="text" class="search" name="q" value="{{ c.q }}" autocomplete="off" placeholder="{{ _('Search') }}" />
