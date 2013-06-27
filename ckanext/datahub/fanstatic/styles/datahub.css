@@ -306,13 +306,13 @@
 }
 a,
 .btn-link {
-  color: #242424;
+  color: #fb7601;
 }
 a:hover,
 a:focus,
 .btn-link:hover,
 .btn-link:focus {
-  color: #0a0a0a;
+  color: #fe9131;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
