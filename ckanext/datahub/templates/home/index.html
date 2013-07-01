@@ -16,7 +16,7 @@
                 {% endtrans %}
               {% endblock %}
               </p>
-              <a href="user/login" class="btn btn-warning btn-large">Register data for free</a>
+              {% link_for _('Register data for free'), controller='package', action='new', class_='btn btn-warning btn-large' %}
             {% endblock %}
           {% endif %}
         </div>
