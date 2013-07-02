@@ -12,19 +12,20 @@
               <h1 class="page-heading">{% block home_primary_heading %}{{ _("Give your data a home") }}{% endblock %}</h1>
               <p>
               {% block home_primary_text %}
-                {% trans %}Register published datasets, create and manage groups of datasets.
+                {% trans %}
+                  Publish or register datasets, create and manage groups and communities.
                 {% endtrans %}
               {% endblock %}
               </p>
-              {% link_for _('Register data for free'), controller='package', action='new', class_='btn btn-warning btn-large' %}
+              {% link_for _('Publish data for free'), controller='package', action='new', class_='btn btn-warning btn-large' %}
             {% endblock %}
           {% endif %}
         </div>
         <div class="span6 home-search">
           {% block home_search %}
             <form class="dataset-search clearfix" method="get" action="{% url_for controller='package', action='search' %}">
-              <h3 class="heading">{{ _("Search your data") }}</h3>
-              <p>Search for data, and get updates from datasets and groups you're interested in.</p>
+              <h3 class="heading">{{ _("Find data") }}</h3>
+              <p>Search for data, and get updates from datasets and groups that you're interested in.</p>
               <span class="control-group search-giant">
                 <input type="text" class="search" name="q" value="{{ c.q }}" autocomplete="off" placeholder="{{ _('Search') }}" />
                 <button type="submit" value="{{ _('Search') }}">Submit</button>
