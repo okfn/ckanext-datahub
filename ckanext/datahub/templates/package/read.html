@@ -3,6 +3,8 @@
 {% block primary_content_inner %}
   {{ super() }}
 
-  {{ h.disqus_comments() }}
+  <div class="module-content">
+    {{ h.disqus_comments() }}
+  </div>
 {% endblock %}
 
