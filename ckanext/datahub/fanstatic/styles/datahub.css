@@ -129,10 +129,9 @@
 }
 .main.homepage .tags h3 {
   float: left;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 24px;
   margin: 0 10px 0 0;
-  display: none;
 }
 .main.homepage .tags ul,
 .tags ul.tag-list {
@@ -152,7 +151,7 @@
   height: 24px;
   line-height: 24px;
   position: relative;
-  font-size: 11px;
+  font-size: 12px;
 }
 .main.homepage .tags ul li,
 .main.homepage .tags ul a.tag {
