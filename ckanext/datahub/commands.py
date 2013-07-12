@@ -97,8 +97,10 @@ class DatahubCommand(p.toolkit.CkanCommand):
 
         try:
             for page in range(num_pages):
+                search_params = {'rows': page_size, 'start': page,
+                                 'sort': 'metadata_modified desc'}
                 datasets = p.toolkit.get_action('package_search')(
-                    {}, {'rows': page_size, 'start': page})['results']
+                    {}, search_params)['results']
                 for dataset in datasets:
                     if len(dataset.get('resources', [])) == 0:
                         print
