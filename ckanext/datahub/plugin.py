@@ -16,4 +16,5 @@ class DataHub(p.SingletonPlugin):
         p.toolkit.add_resource('fanstatic', 'ckanext-datahub')
 
     def get_auth_functions(self):
-        return {'package_delete': auth.package_delete}
+        return {'package_delete': auth.package_delete,
+                'resource_delete': auth.resource_delete}

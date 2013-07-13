@@ -7,3 +7,11 @@ def package_delete(context, data_dict):
 
     return {'success': False,
             'msg': 'You are not authorized to delete packages.'}
+
+
+def resource_delete(context, data_dict):
+    if model.User.get(context.get('user')):
+        return {'success': True}
+
+    return {'success': False,
+            'msg': 'You are not authorized to delete resources.'}
