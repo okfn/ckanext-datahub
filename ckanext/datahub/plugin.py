@@ -17,4 +17,5 @@ class DataHub(p.SingletonPlugin):
 
     def get_auth_functions(self):
         return {'package_delete': auth.package_delete,
-                'resource_delete': auth.resource_delete}
+                'resource_delete': auth.resource_delete,
+                'file_upload': auth.file_upload}
