@@ -9,6 +9,7 @@ class DataHub(p.SingletonPlugin):
 
     p.implements(p.IConfigurer)
     p.implements(p.IAuthFunctions)
+    p.implements(p.ITemplateHelpers)
 
     def update_config(self, config):
         p.toolkit.add_public_directory(config, 'public')
@@ -18,3 +19,17 @@ class DataHub(p.SingletonPlugin):
     def get_auth_functions(self):
         return {'package_delete': auth.package_delete,
                 'resource_delete': auth.resource_delete}
+
+    def get_helpers(self):
+        """
+        All functions, not starting with __ in the ckanext.datahub.lib
+        module will be loaded and makde available as helpers to the
+        templates.
+        """
+        from ckanext.datahub.lib import helpers
+        from inspect import getmembers, isfunction
+
+        helper_dict = {}
+
+        funcs = [o for o in getmembers(helpers, isfunction)]
+        return dict([(f[0],f[1],) for f in funcs if not f[0].startswith('__')])
