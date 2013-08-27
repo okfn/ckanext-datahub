@@ -3,3 +3,7 @@
 {% block add_action_content %}
   {% link_for _('Add Dataset'), controller='package', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
 {% endblock %}
+
+{% block package_search_results_list %}
+    {{ h.snippet('snippets/datahub/package_list.html', packages=c.page.items) }}
+{% endblock %}
