@@ -49,6 +49,7 @@ Example:
       <div class="pull-right">
               <a href="{{ h.url_for(controller='package', action='delete', id=package['id']) }}" class="btn btn-danger"  data-module="confirm-action" data-module-i18n="{&quot;content&quot;: &quot;Are you sure you want to delete this dataset?&quot;}">Delete spam</a>
       </div>
+      <div class="clearfix"></div>
     {% endif %}
     {% if package.resources and not hide_resources %}
       <ul class="dataset-resources unstyled">

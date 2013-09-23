@@ -17,7 +17,7 @@ Example:
 {% if packages %}
   <ul class="{{ list_class or 'dataset-list unstyled' }}">
     {% for package in packages %}
-      {% snippet 'snippets/datahub/package_item.html', package=package, item_class=item_class, hide_resources=hide_resources, banner=banner, truncate=truncate, truncate_title=truncate_title %}
+      {% snippet 'snippets/datahub/package_item.html', package=package, item_class=item_class, hide_resources=hide_resources, banner=banner, truncate=truncate, truncate_title=truncate_title, user=user %}
     {% endfor %}
   </ul>
 {% endif %}
