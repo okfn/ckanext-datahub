@@ -7,14 +7,20 @@ class DataHub(p.SingletonPlugin):
     This plugin provides customisation specific to datahub.
     '''
 
+    p.implements(p.IConfigurable)
     p.implements(p.IConfigurer)
     p.implements(p.IAuthFunctions)
     p.implements(p.ITemplateHelpers)
+
+    def configure(self, config):
+        from ckanext.datahub.model.user_extra import setup as model_setup
+        model_setup()
 
     def update_config(self, config):
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
         p.toolkit.add_resource('fanstatic', 'ckanext-datahub')
+
 
     def get_auth_functions(self):
         return {'package_delete': auth.package_delete,
