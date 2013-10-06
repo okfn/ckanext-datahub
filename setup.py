@@ -23,6 +23,7 @@ setup(
         datahub=ckanext.datahub.plugin:DataHub
 
         [paste.paster_command]
-        datahub=ckanext.datahub.commands:DatahubCommand
+        datahub=ckanext.datahub.commands.datahub:DatahubCommand
+        org_upgrade=ckanext.datahub.commands.upgrade:OrgUpgradesCommand
     ''',
 )

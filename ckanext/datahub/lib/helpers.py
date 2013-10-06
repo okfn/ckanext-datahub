@@ -25,3 +25,11 @@ def user_moderation_required():
     from paste.deploy.converters import asbool
     mod = asbool(c.userobj.extras.get('moderation', True))
     return not mod
+
+
+def org_dataset_count(organization):
+    import ckan.model as model
+
+    return model.Session.query(model.Package)\
+            .filter(model.Package.state=='active')\
+            .filter(model.Package.owner_org==organization['id']).count()

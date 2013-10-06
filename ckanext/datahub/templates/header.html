@@ -4,3 +4,12 @@
   <a class="logo" href="{{ h.url('home') }}"><img src="{{ h.url_for_static('/images/logo.png') }}" alt="{{ g.site_title }}" /></a>
   {% if g.site_description %}<h2>{{ g.site_description }}</h2>{% endif %}
 {% endblock %}
+
+
+{% block header_site_navigation_tabs %}
+            {{ h.build_nav_main(
+              ('search', _('Datasets')),
+              ('organizations_index', _('Organizations')),
+              ('about', _('About'))
+            ) }}
+{% endblock %}
