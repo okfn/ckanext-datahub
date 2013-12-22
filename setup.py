@@ -24,6 +24,7 @@ setup(
 
         [paste.paster_command]
         datahub=ckanext.datahub.commands.datahub:DatahubCommand
+        purge=ckanext.datahub.commands.purge:PurgeCommand
         org_upgrade=ckanext.datahub.commands.upgrade:OrgUpgradeCommand
     ''',
 )
