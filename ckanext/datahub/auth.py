@@ -22,7 +22,7 @@ def datahub_package_create(context, data_dict):
         #if not authorized and not a part of any org, redirect to help page on how to join one
         if not check1 and not new_authz.has_user_permission_for_some_org(user, 'create_dataset'):
             if '/new' in c.environ['PATH_INFO']:
-                h.redirect_to('/pages/requesting-an-organization')
+                h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
             else:
                 return {'success': False, 'msg': _('User %s not authorized to create packages') % user}
 
