@@ -24,8 +24,8 @@ class DataHub(p.SingletonPlugin):
 
     def get_auth_functions(self):
         return {'package_delete': auth.package_delete,
-                'resource_delete': auth.resource_delete,}
-                #'package_create': auth.datahub_package_create}
+                'resource_delete': auth.resource_delete,
+                'package_create': auth.datahub_package_create}
 
     def get_helpers(self):
         """
