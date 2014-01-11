@@ -14,23 +14,23 @@ def datahub_package_create(context, data_dict):
 
     user = context['user']
     if not new_authz.auth_is_registered_user():
-        return {'success': False, 'msg': _('You must login to create a dataset')}
-    else:
-        check1 = new_authz.check_config_permission('create_dataset_if_not_in_organization') \
-            or new_authz.check_config_permission('create_unowned_dataset')
+        if '/new' in c.environ['PATH_INFO']:
+            h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
+        else:
+            return {'success': False, 'msg': _('You must login to create a dataset')}
 
-        #if not authorized and not a part of any org, redirect to help page on how to join one
-        if not check1 and not new_authz.has_user_permission_for_some_org(user, 'create_dataset'):
-            if '/new' in c.environ['PATH_INFO']:
-                h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
-            else:
-                return {'success': False, 'msg': _('User %s not authorized to create packages') % user}
+    check1 = new_authz.check_config_permission('create_dataset_if_not_in_organization') \
+        or new_authz.check_config_permission('create_unowned_dataset')
 
-    if not check1:
-        return {'success': False, 'msg': _('User %s not authorized to create packages') % user}
+    #if not authorized and not a part of any org, redirect to help page on how to join one
+    if not check1 and not new_authz.has_user_permission_for_some_org(user, 'create_dataset'):
+        if '/new' in c.environ['PATH_INFO']:
+            h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
+        else:
+            return {'success': False, 'msg': _('User %s not authorized to create packages') % user}
 
     check2 = _check_group_auth(context,data_dict)
-    if not check2:
+    if not check2 and not check1:
         return {'success': False, 'msg': _('User %s not authorized to edit these groups') % user}
 
     # If an organization is given are we able to add a dataset to it?
