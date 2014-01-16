@@ -19,9 +19,10 @@ module.exports = function(grunt) {
         files: {
           'ckanext/datahub/public/assets/styles/core.css':
             [
+              '../ckan/ckan/public/base/css/main.css',
+
               '../ckan/ckan/public/css/boilerplate.css',
               '../ckan/ckan/public/css/bootstrap.min.css',
-              '../ckan/ckan/public/base/css/main.css',
               '../ckan/ckan/public/scripts/vendor/jqueryui/1.8.14/css/jquery-ui.custom.css',
               '../ckan/ckan/public/css/chosen.css',
               '../ckan/ckan/public/css/forms.css',

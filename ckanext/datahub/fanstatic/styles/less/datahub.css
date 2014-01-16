@@ -47,25 +47,18 @@
   z-index: 1;
   background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
   /* FF3.6+ */
-
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.25)), color-stop(100%, rgba(0, 0, 0, 0)));
   /* Chrome,Safari4+ */
-
   background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
   /* Chrome10+,Safari5.1+ */
-
   background: -o-linear-gradient(top, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
   /* Opera 11.10+ */
-
   background: -ms-linear-gradient(top, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
   /* IE10+ */
-
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
   /* W3C */
-
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d000000', endColorstr='#00000000', GradientType=0);
   /* IE6-9 */
-
 }
 .hero-primary,
 .hero-secondary {
@@ -196,7 +189,6 @@
   height: 0;
   border-color: #005d7a;
   /* Fallback for IE8 */
-
   border-color: rgba(0, 93, 122, 0);
   border-left-color: #005d7a;
   border-style: solid;
@@ -227,7 +219,6 @@
 .tags ul.tag-list a.tag:hover:before {
   border-color: #003647;
   /* Fallback for IE8 */
-
   border-color: rgba(0, 54, 71, 0);
   border-left-color: #003647;
 }
@@ -240,11 +231,9 @@
   height: 0;
   border-color: #005d7a;
   /* Fallback for IE8 */
-
   border-color: rgba(0, 0, 0, 0);
   border-left-color: rgba(0, 0, 0, 0);
   /* shadow colour */
-
   border-style: solid;
   border-width: 12px 0 12px 12px;
   right: -13px;
@@ -280,16 +269,12 @@
   display: block;
   -webkit-transform: rotate(45deg);
   /* Safari */
-
   -moz-transform: rotate(45deg);
   /* Firefox */
-
   -ms-transform: rotate(45deg);
   /* IE */
-
   -o-transform: rotate(45deg);
   /* Opera */
-
   position: absolute;
   top: 20px;
   left: 10px;
@@ -621,7 +606,6 @@ body {
 .tags ul.tag-list a.tag:before {
   border-color: #ffffff;
   /* Fallback for IE8 */
-
   border-color: rgba(255, 255, 255, 0);
   border-left-color: #ffffff;
 }
@@ -634,7 +618,6 @@ body {
 .tags ul.tag-list a.tag:after {
   background-color: #F5F5F5;
   /* well colour */
-
 }
 .main.homepage .tags ul a.tag:hover,
 .tags ul.tag-list a.tag:hover {
@@ -645,7 +628,6 @@ body {
 .tags ul.tag-list a.tag:hover:before {
   border-color: #3d3d3d;
   /* Fallback for IE8 */
-
   border-color: rgba(61, 61, 61, 0);
   border-left-color: #3d3d3d;
 }
@@ -653,9 +635,7 @@ body {
 .tags ul.tag-list li:before {
   border-color: #ffffff;
   /* Fallback for IE8 */
-
   border-color: rgba(0, 0, 0, 0);
   border-left-color: rgba(0, 0, 0, 0.1);
   /* shadow colour */
-
 }
