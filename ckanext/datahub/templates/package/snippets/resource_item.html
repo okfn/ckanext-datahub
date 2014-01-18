@@ -3,8 +3,12 @@
   {% block resource_item_title %}
   <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
     {{ h.resource_display_name(res) | truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
-    {{ h.popular('views', res.tracking_summary.total, min=10) }}
   </a>
+
+  {#
+    Resource views. Do we want to show all of them (even those that are APIs and we may not have numbers for)?
+      ({{ res.tracking_summary.total }} views)
+  #}
   {% endblock %}
   <p class="description">
     {% if res.description %}
