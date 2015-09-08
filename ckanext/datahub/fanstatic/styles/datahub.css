@@ -1,3 +1,13 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 html {
   overflow-x: hidden;
 }
@@ -106,9 +116,36 @@ html {
 .home-search p {
   padding: 0 60px;
 }
+.hero .search-giant {
+  position: relative;
+  display: inline-block;
+}
 .hero .search-giant input {
-  padding: 11px 10px;
-  width: 220px;
+  padding: 11px 44px 11px 10px;
+  width: 186px;
+}
+.hero .search-giant button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  background-color: transparent;
+  border: none;
+  line-height: 1;
+}
+.hero .search-giant button i {
+  font-size: 18px;
+}
+.hero .search-giant button span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 .hero-secondary {
   -webkit-border-top-left-radius: 4px;
@@ -612,8 +649,8 @@ body {
   box-shadow: none;
   background-color: #fff5ed;
 }
-.hero .search-giant button {
-  background-image: url(/assets/images/icon-search-27x26.png);
+.hero .search-giant button i {
+  color: #fe9131;
 }
 /* Tags */
 .main.homepage .tags {
