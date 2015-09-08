@@ -55,7 +55,11 @@ module.exports = function(grunt) {
           dest: 'ckanext/datahub/public/assets/images/'                  // Destination path prefix
         }]
       }
-    }
+    },
+    watch: {
+		files: "ckanext/datahub/fanstatic/styles/less/*.less",
+		tasks: ["less", "cssmin"]
+	}
   });
 
   // Default task(s).
