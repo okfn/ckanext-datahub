@@ -3,7 +3,6 @@ module.exports = function(grunt) {
   var pkg = grunt.file.readJSON('package.json');
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -43,19 +42,6 @@ module.exports = function(grunt) {
         dest: 'ckanext/datahub/fanstatic/styles/less/datahub.css'
       }
     },
-    imagemin: {
-      dynamic: {
-        options: {
-          optimizationLevel: 3
-        },
-        files: [{
-          expand: true,                  // Enable dynamic expansion
-          cwd: 'ckanext/datahub/fanstatic/images/',                   // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
-          dest: 'ckanext/datahub/public/assets/images/'                  // Destination path prefix
-        }]
-      }
-    },
     watch: {
 		files: "ckanext/datahub/fanstatic/styles/less/*.less",
 		tasks: ["less", "cssmin"]
@@ -63,5 +49,5 @@ module.exports = function(grunt) {
   });
 
   // Default task(s).
-  grunt.registerTask('default', ['less', 'cssmin','imagemin']);
+  grunt.registerTask('default', ['less', 'cssmin']);
 };
