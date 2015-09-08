@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     },
     less: {
       options: {
-        yuicompress: true
+        yuicompress: false
       },
       build: {
         src: 'ckanext/datahub/fanstatic/styles/less/datahub.less',
