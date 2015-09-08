@@ -1,8 +1,6 @@
 {% ckan_extends %}
 
 {% block styles %}
-  {{ super() }}
-
-  <link rel='stylesheet' href='/assets/styles/datahub.css'>
-
+    {{ super() }}
+    {% resource 'ckanext-datahub/styles/datahub.css' %}
 {% endblock %}

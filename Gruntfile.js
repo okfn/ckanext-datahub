@@ -5,7 +5,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-less');
 
   grunt.file.setBase('.');
@@ -13,41 +12,21 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: pkg,
-    cssmin: {
-      combine: {
-        files: {
-          'ckanext/datahub/public/assets/styles/core.css':
-            [
-              '../ckan/ckan/public/base/css/main.css',
-
-              '../ckan/ckan/public/css/boilerplate.css',
-              '../ckan/ckan/public/css/bootstrap.min.css',
-              '../ckan/ckan/public/scripts/vendor/jqueryui/1.8.14/css/jquery-ui.custom.css',
-              '../ckan/ckan/public/css/chosen.css',
-              '../ckan/ckan/public/css/forms.css',
-              '../ckan/ckan/public/css/style.css'
-            ],
-          'ckanext/datahub/public/assets/styles/datahub.css': [
-              'ckanext/datahub/fanstatic/styles/less/datahub.css',
-          ]
-        }
-      }
-    },
     less: {
       options: {
         yuicompress: false
       },
       build: {
         src: 'ckanext/datahub/fanstatic/styles/less/datahub.less',
-        dest: 'ckanext/datahub/fanstatic/styles/less/datahub.css'
+        dest: 'ckanext/datahub/fanstatic/styles/datahub.css'
       }
     },
     watch: {
 		files: "ckanext/datahub/fanstatic/styles/less/*.less",
-		tasks: ["less", "cssmin"]
+		tasks: ["less"]
 	}
   });
 
   // Default task(s).
-  grunt.registerTask('default', ['less', 'cssmin']);
+  grunt.registerTask('default', ['less']);
 };
