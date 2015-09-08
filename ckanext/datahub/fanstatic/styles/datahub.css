@@ -1,3 +1,6 @@
+html {
+  overflow-x: hidden;
+}
 /* Header */
 .masthead {
   padding-top: 8px;
@@ -35,8 +38,16 @@
   clear: left;
   padding-top: 10px;
 }
+.layout-1 {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.main.homepage {
+  border-top: 1px solid #cccccc;
+}
 /* Banner */
-.hero {
+.hero,
+.homepage [role="main"] {
   padding: 0;
 }
 .hero:before {
@@ -255,7 +266,7 @@
   -moz-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
 }
-.main.homepage .group-listing .box {
+.main.homepage .grouplist .box {
   position: relative;
 }
 .ribbon {
