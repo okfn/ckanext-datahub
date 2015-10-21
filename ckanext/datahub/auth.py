@@ -4,8 +4,11 @@ import ckan.logic as logic
 import ckan.new_authz as new_authz
 from ckan.common import _
 from ckan.lib.base import c
+from ckan.plugins import toolkit
+
 
 @logic.auth_sysadmins_check
+@toolkit.auth_allow_anonymous_access
 def datahub_package_create(context, data_dict):
     from ckan.logic.auth.create import _check_group_auth
 
