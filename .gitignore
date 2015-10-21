@@ -1,4 +1,5 @@
 syntax: glob
+.DS_Store
 *.egg-info
 *.pyc
 *.swp
@@ -6,3 +7,4 @@ syntax: glob
 *~
 build/
 dist/
+node_modules

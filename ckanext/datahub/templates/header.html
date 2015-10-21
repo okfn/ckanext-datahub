@@ -1,0 +1,23 @@
+{% ckan_extends %}
+
+{% block header_logo %}
+  <a class="logo" href="{{ h.url('home') }}"><img src="/assets/images/logo.png" alt="{{ g.site_title }}" /></a>
+  {% if g.site_description %}<h2>{{ g.site_description }}</h2>{% endif %}
+{% endblock %}
+
+{% block header_site_navigation %}
+    <nav class="section navigation">
+      <ul class="nav nav-pills">
+        {% block header_site_navigation_tabs %}
+        {{ h.build_nav_main(
+          ('search', _('Datasets')),
+          ('organizations_index', _('Organizations')),
+          ('about', _('About'))
+        ) }}
+        <li><a href="http://blog.datahub.io/">Blog</a></li>
+        <li><a href="http://help.datahub.io/">Help</a></li>
+
+        {% endblock %}
+      </ul>
+    </nav>
+{% endblock %}
