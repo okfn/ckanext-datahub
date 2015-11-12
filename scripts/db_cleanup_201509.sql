@@ -100,7 +100,7 @@ DELETE FROM package_relationship_revision r WHERE r.object_package_id IN (SELECT
 DELETE FROM package_relationship r WHERE r.subject_package_id IN (SELECT id FROM package WHERE state = 'deleted');
 DELETE FROM package_relationship r WHERE r.object_package_id IN (SELECT id FROM package WHERE state = 'deleted');
 
-DELETE FROM related_dataset r WHERE r.package_id IN (SELECT id FROM package WHERE state = 'deleted');
+DELETE FROM related_dataset r WHERE r.dataset_id IN (SELECT id FROM package WHERE state = 'deleted');
 DELETE FROM package WHERE state = 'deleted';
 
 
