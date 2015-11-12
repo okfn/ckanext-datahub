@@ -3,29 +3,5 @@
 {% block styles %}
     {{ super() }}
     {% resource 'ckanext-datahub/styles/datahub.css' %}
-
-    <style type="text/css">
-        body{ margin-top: 0px; padding-top: 45px; }
-        #__header__ {
-           position: absolute;
-           top: 0; left: 0;
-           background-color: #fe9131;
-           width: 100%;
-           border-bottom: 2px solid #000;
-           font-family: helvetica, sans;
-           color: white;
-        }
-        #__header__inner__{width: 800px; margin: 0 auto; padding: 10px; text-align: center;}
-        #__header__inner__ a{ font-weight: bold; color: white; }
-    </style>
-
 {% endblock %}
 
-{% block body_extras %}
-<div id="__header__">
-    <div id="__header__inner__">
-        DataHub has been upgraded to use Organizations. <a href="http://blog.datahub.io/2013/10/11/organization-migration-complete/">Find out more &raquo;</a></a>
-    </div>
-</div>
-
-{% endblock %}
