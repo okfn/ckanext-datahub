@@ -6,6 +6,8 @@ from ckan.common import _
 from ckan.lib.base import c
 from ckan.plugins import toolkit
 
+CREATE_DATASET_HELP_PAGE = 'https://discuss.okfn.org/t/creating-a-dataset-on-the-datahub/1627'
+
 
 @logic.auth_sysadmins_check
 @toolkit.auth_allow_anonymous_access
@@ -18,7 +20,7 @@ def datahub_package_create(context, data_dict):
     user = context['user']
     if not new_authz.auth_is_registered_user():
         if '/new' in c.environ['PATH_INFO']:
-            h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
+            h.redirect_to(CREATE_DATASET_HELP_PAGE)
         else:
             return {'success': False, 'msg': _('You must login to create a dataset')}
 
@@ -28,7 +30,7 @@ def datahub_package_create(context, data_dict):
     #if not authorized and not a part of any org, redirect to help page on how to join one
     if not check1 and not new_authz.has_user_permission_for_some_org(user, 'create_dataset'):
         if '/new' in c.environ['PATH_INFO']:
-            h.redirect_to('http://help.datahub.io/kb/general/creating-a-dataset-on-the-datahub-december-2013')
+            h.redirect_to(CREATE_DATASET_HELP_PAGE)
         else:
             return {'success': False, 'msg': _('User %s not authorized to create packages') % user}
 
