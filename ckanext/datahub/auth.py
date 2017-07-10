@@ -1,10 +1,16 @@
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.logic as logic
-import ckan.authz as authz
 from ckan.common import _
 from ckan.lib.base import c
 from ckan.plugins import toolkit
+
+try:
+    # CKAN 2.5 and bellow
+    import ckan.new_authz as authz
+except ImportError:
+    # CKAN 2.6 and up
+    import ckan.authz as authz
 
 CREATE_DATASET_HELP_PAGE = 'https://discuss.okfn.org/t/creating-a-dataset-on-the-datahub/1627'
 
